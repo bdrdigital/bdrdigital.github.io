@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BDR Digital — Sites e automações para pequenas empresas</title>
+<meta name="description" content="A BDR Digital cria sites, landing pages e automações para pequenas empresas. Veja uma prévia do seu site antes de fechar qualquer coisa.">
+<meta property="og:title" content="BDR Digital — Sites e automações para pequenas empresas">
+<meta property="og:description" content="Seu negócio merece um site de verdade. Veja a prévia antes de fechar.">
+<meta name="theme-color" content="#07080B">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#07080B; --bg2:#0D0F15; --card:rgba(20,22,31,.78); --card-s:#14161F; --line:#232633;
+    --text:#ECEEF3; --muted:#9097A8; --dim:#5D6375;
+    --lime:#C8FF45; --violet:#7C6CFF;
+    --radius:20px;
+    --head:'Bricolage Grotesque',system-ui,sans-serif;
+    --body:'Instrument Sans',system-ui,sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:17px;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  .wrap{width:min(1180px,92vw);margin:0 auto}
+  ::selection{background:var(--lime);color:#000}
+
+  /* ===== WEBGL BACKGROUND ===== */
+  #gl{position:fixed;inset:0;width:100vw;height:100vh;z-index:0;pointer-events:none;transition:opacity .6s}
+  .gl-fallback{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(circle at 75% 35%,rgba(124,108,255,.18),transparent 45%),radial-gradient(circle at 20% 80%,rgba(200,255,69,.08),transparent 40%);display:none}
+  .no-gl .gl-fallback{display:block}
+  .scanlines{position:fixed;inset:0;z-index:1;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(255,255,255,.012) 0 1px,transparent 1px 3px)}
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:200;opacity:.05;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+  /* ===== CURSOR ===== */
+  .cur,.cur-ring{position:fixed;left:0;top:0;pointer-events:none;z-index:300;border-radius:50%;transform:translate(-50%,-50%);display:none}
+  .cur{width:6px;height:6px;background:var(--lime)}
+  .cur-ring{width:38px;height:38px;border:1px solid rgba(200,255,69,.5);transition:width .25s,height .25s,background .25s,border-color .25s}
+  .cur-ring.big{width:70px;height:70px;background:rgba(200,255,69,.08);border-color:var(--lime)}
+  .has-cursor .cur,.has-cursor .cur-ring{display:block}
+  .has-cursor, .has-cursor a, .has-cursor button{cursor:none}
+
+  /* ===== TOP PROGRESS + HUD ===== */
+  .topbar{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--violet),var(--lime));z-index:70;width:0;box-shadow:0 0 12px var(--lime)}
+  .hud-side{position:fixed;right:26px;top:50%;transform:translateY(-50%);z-index:40;display:flex;flex-direction:column;gap:14px;font-family:var(--mono);font-size:11px}
+  .hud-side a{display:flex;align-items:center;justify-content:flex-end;gap:10px;color:var(--dim);transition:color .3s}
+  .hud-side a i{width:18px;height:1px;background:var(--dim);transition:width .3s,background .3s}
+  .hud-side a span{opacity:0;transform:translateX(6px);transition:.3s}
+  .hud-side a.on{color:var(--lime)} .hud-side a.on i{width:36px;background:var(--lime)} .hud-side a.on span,.hud-side a:hover span{opacity:1;transform:none}
+  .hud-read{position:fixed;left:26px;bottom:22px;z-index:40;font-family:var(--mono);font-size:11px;color:var(--dim);display:flex;gap:18px;letter-spacing:.03em}
+  .hud-read b{color:var(--lime);font-weight:500}
+
+  /* ===== NAV ===== */
+  nav{position:fixed;top:0;left:0;right:0;z-index:60;transition:background .3s,border-color .3s;border-bottom:1px solid transparent}
+  nav.scrolled{background:rgba(7,8,11,.72);backdrop-filter:blur(14px);border-color:var(--line)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:74px}
+  .logo{display:flex;align-items:center;gap:10px;font-family:var(--head);font-weight:800;font-size:21px;letter-spacing:-.02em}
+  .logo-mark{width:34px;height:34px;border-radius:10px;background:var(--lime);color:#07080B;display:grid;place-items:center;font-size:13px;font-weight:800;letter-spacing:-.04em}
+  .logo span{color:var(--muted);font-weight:600}
+  .nav-links{display:flex;gap:34px;font-size:15px;color:var(--muted)}
+  .nav-links a{transition:color .2s}
+  .nav-links a:hover{color:var(--text)}
+  .btn{display:inline-flex;align-items:center;gap:10px;padding:13px 22px;border-radius:999px;font-weight:600;font-size:15px;transition:background .2s,box-shadow .2s;cursor:pointer;border:0;font-family:var(--body);will-change:transform}
+  .btn-lime{background:var(--lime);color:#07080B}
+  .btn-lime:hover{box-shadow:0 10px 34px -6px rgba(200,255,69,.6)}
+  .btn-ghost{border:1px solid var(--line);color:var(--text);background:rgba(7,8,11,.4);backdrop-filter:blur(6px)}
+  .btn-ghost:hover{border-color:var(--muted)}
+  .btn svg{width:17px;height:17px}
+  .menu-btn{display:none;background:none;border:0;color:var(--text);cursor:pointer}
+
+  /* ===== HERO ===== */
+  section,header,footer,.marquee{position:relative;z-index:2}
+  .hero{min-height:100vh;display:flex;align-items:center;padding:120px 0 80px}
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center}
+  .tag{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:13px;color:var(--lime);border:1px solid rgba(200,255,69,.25);background:rgba(200,255,69,.06);padding:7px 14px;border-radius:999px}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 0 rgba(200,255,69,.6);animation:pulse 2s infinite}
+  @keyframes pulse{70%{box-shadow:0 0 0 9px rgba(200,255,69,0)}100%{box-shadow:0 0 0 0 rgba(200,255,69,0)}}
+  h1{font-family:var(--head);font-weight:800;font-size:clamp(44px,6.4vw,86px);line-height:.98;letter-spacing:-.045em;margin:26px 0 24px}
+  h1 .hl{color:var(--lime);white-space:nowrap;text-shadow:0 0 40px rgba(200,255,69,.35)}
+  .rotator{display:inline-block;color:var(--lime)}
+  .rotator::after{content:"_";margin-left:1px;animation:blink 1s steps(1) infinite}
+  @keyframes blink{50%{opacity:0}}
+  .lead{font-size:20px;color:var(--muted);max-width:540px;margin-bottom:36px}
+  .lead strong{color:var(--text);font-weight:600}
+  .hero-cta{display:flex;gap:14px;flex-wrap:wrap}
+  .hero-note{margin-top:28px;display:flex;gap:22px;flex-wrap:wrap;font-size:14px;color:var(--dim)}
+  .hero-note span{display:flex;align-items:center;gap:8px}
+  .hero-note svg{width:16px;height:16px;color:var(--lime)}
+  .orbit{position:relative;height:560px}
+  .chip{position:absolute;font-family:var(--mono);font-size:11.5px;color:var(--muted);background:rgba(13,15,21,.72);backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:8px;padding:7px 11px;display:flex;gap:8px;align-items:center;animation:bob 6s ease-in-out infinite;white-space:nowrap}
+  .chip b{color:var(--lime);font-weight:500}
+  .chip::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--lime);box-shadow:0 0 8px var(--lime)}
+  .chip.c1{top:12%;left:4%}.chip.c2{top:30%;right:0;animation-delay:-2s}.chip.c3{bottom:20%;left:0;animation-delay:-4s}.chip.c4{bottom:6%;right:12%;animation-delay:-1s}
+  @keyframes bob{50%{transform:translateY(-10px)}}
+  .scroll-hint{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:11px;color:var(--dim);display:flex;flex-direction:column;align-items:center;gap:10px;letter-spacing:.2em}
+  .scroll-hint i{width:1px;height:46px;background:linear-gradient(var(--lime),transparent);animation:drip 1.8s ease-in-out infinite;transform-origin:top}
+  @keyframes drip{0%{transform:scaleY(0)}50%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
+
+  /* ===== MARQUEE ===== */
+  .marquee{border-block:1px solid var(--line);padding:22px 0;overflow:hidden;background:rgba(13,15,21,.8);backdrop-filter:blur(6px)}
+  .track{display:flex;gap:56px;width:max-content;animation:scroll 38s linear infinite}
+  .track span{font-family:var(--head);font-size:26px;font-weight:600;color:var(--dim);white-space:nowrap;display:flex;align-items:center;gap:56px;letter-spacing:-.02em}
+  .track span::after{content:"✦";color:var(--lime);font-size:16px}
+  @keyframes scroll{to{transform:translateX(-50%)}}
+
+  /* ===== SECTIONS ===== */
+  .sec{padding:140px 0}
+  .eyebrow{font-family:var(--mono);font-size:13px;color:var(--lime);letter-spacing:.04em;margin-bottom:18px;display:block}
+  h2{font-family:var(--head);font-weight:800;font-size:clamp(36px,4.6vw,62px);line-height:1.02;letter-spacing:-.04em;max-width:780px}
+  h2 em{font-style:normal;color:var(--muted)}
+  .sec-head{display:flex;justify-content:space-between;align-items:end;gap:40px;margin-bottom:64px;flex-wrap:wrap}
+  .sec-head p{color:var(--muted);max-width:400px}
+  .glass{background:var(--card);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:var(--radius)}
+
+  .problem{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .pcard{padding:30px}
+  .pnum{font-family:var(--head);font-weight:800;font-size:54px;letter-spacing:-.04em;line-height:1;margin-bottom:14px}
+  .pcard p{color:var(--muted);font-size:16px}
+  .pcard p strong{color:var(--text);font-weight:600}
+
+  .services{display:grid;grid-template-columns:repeat(6,1fr);gap:18px;perspective:1200px}
+  .svc{grid-column:span 2;padding:34px;position:relative;overflow:hidden;transition:border-color .3s;transform-style:preserve-3d}
+  .svc:hover{border-color:#3a3f52}
+  .svc.big{grid-column:span 3}
+  .svc::before{content:"";position:absolute;inset:0;background:radial-gradient(420px circle at var(--mx,50%) var(--my,0%),rgba(200,255,69,.09),transparent 50%);opacity:0;transition:opacity .3s;pointer-events:none}
+  .svc:hover::before{opacity:1}
+  .svc-ic{width:50px;height:50px;border-radius:14px;background:rgba(200,255,69,.1);color:var(--lime);display:grid;place-items:center;margin-bottom:26px}
+  .svc-ic svg{width:24px;height:24px}
+  .svc h3{font-family:var(--head);font-size:25px;font-weight:600;letter-spacing:-.025em;margin-bottom:10px}
+  .svc p{color:var(--muted);font-size:16px}
+  .svc ul{list-style:none;margin-top:20px;display:flex;flex-wrap:wrap;gap:8px}
+  .svc li{font-family:var(--mono);font-size:12px;color:var(--muted);border:1px solid var(--line);padding:5px 11px;border-radius:999px}
+
+  /* ===== PINNED BUILD SECTION ===== */
+  .build{height:440vh}
+  .build-sticky{position:sticky;top:0;height:100vh;display:flex;align-items:center;overflow:hidden}
+  .build-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:60px;align-items:center}
+  .build h2{font-size:clamp(34px,4vw,54px);margin-bottom:34px}
+  .steps{list-style:none;display:grid;gap:4px;position:relative;padding-left:26px}
+  .steps::before{content:"";position:absolute;left:4px;top:8px;bottom:8px;width:1px;background:var(--line)}
+  .steps .rail{position:absolute;left:4px;top:8px;width:1px;background:var(--lime);box-shadow:0 0 10px var(--lime);height:0}
+  .step{padding:12px 0;opacity:.35;transition:opacity .4s}
+  .step.on{opacity:1}
+  .step-t{display:flex;align-items:center;gap:12px;font-family:var(--head);font-size:22px;font-weight:600;letter-spacing:-.02em;position:relative}
+  .step-t::before{content:"";position:absolute;left:-27px;width:9px;height:9px;border-radius:50%;background:var(--bg);border:1px solid var(--dim);transition:.3s}
+  .step.on .step-t::before{background:var(--lime);border-color:var(--lime);box-shadow:0 0 12px var(--lime)}
+  .step-t small{font-family:var(--mono);font-size:12px;color:var(--lime);font-weight:400}
+  .step-t .free{font-family:var(--mono);font-size:10.5px;background:var(--lime);color:#000;padding:3px 8px;border-radius:999px;font-weight:500}
+  .step p{color:var(--muted);font-size:15.5px;max-height:0;overflow:hidden;transition:max-height .5s,margin .5s}
+  .step.on p{max-height:80px;margin-top:6px}
+  .bprog{margin-top:30px;display:flex;align-items:center;gap:14px;font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .bprog .bar-o{flex:1;height:3px;border-radius:3px;background:var(--line);overflow:hidden}
+  .bprog .bar-i{height:100%;width:0;background:linear-gradient(90deg,var(--violet),var(--lime))}
+
+  .stage{position:relative;padding-bottom:70px}
+  .browser{--acc:#C8FF45;background:#0E1017;border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 50px 100px -30px rgba(0,0,0,.9),0 0 0 1px rgba(255,255,255,.02) inset;transition:box-shadow .6s}
+  .browser.live{box-shadow:0 50px 100px -30px rgba(0,0,0,.9),0 0 80px -20px var(--acc)}
+  .bbar{display:flex;align-items:center;gap:7px;padding:12px 15px;border-bottom:1px solid var(--line);background:#11131A}
+  .bbar i{width:11px;height:11px;border-radius:50%}
+  .bbar i:nth-child(1){background:#FF5F57}.bbar i:nth-child(2){background:#FEBC2E}.bbar i:nth-child(3){background:#28C840}
+  .burl{margin-left:12px;flex:1;background:#07080B;border-radius:8px;padding:6px 12px;font-family:var(--mono);font-size:12px;color:var(--dim);display:flex;align-items:center;gap:7px;white-space:nowrap;overflow:hidden}
+  .burl svg{width:12px;height:12px;flex:none;color:var(--dim);transition:color .4s}
+  .live .burl svg{color:#3be05a}
+  .live .burl{color:var(--muted)}
+  .msite{position:relative;padding:20px;display:grid;gap:14px;min-height:390px;font-family:var(--body)}
+  .mel{opacity:0;transform:translateY(14px) scale(.98);transition:opacity .5s,transform .5s cubic-bezier(.2,.7,.2,1),background .5s,border-color .5s,color .5s}
+  .mel.in{opacity:1;transform:none}
+  /* wireframe */
+  .wf{border:1px dashed #3a3f52;border-radius:10px;background:transparent;color:transparent}
+  .m-nav{display:flex;justify-content:space-between;align-items:center;padding:10px 12px}
+  .m-logo{font-family:var(--head);font-weight:800;font-size:15px;letter-spacing:-.02em}
+  .m-links{display:flex;gap:12px;font-size:11px}
+  .m-hero{padding:28px 24px;position:relative;overflow:hidden;min-height:170px}
+  .m-hero h4{font-family:var(--head);font-size:30px;line-height:1.02;font-weight:800;letter-spacing:-.03em;max-width:300px}
+  .m-hero p{font-size:12.5px;margin-top:10px;max-width:280px}
+  .m-btn{display:inline-block;margin-top:16px;font-size:12px;font-weight:600;padding:9px 16px;border-radius:999px}
+  .m-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .m-card{padding:14px;font-size:12px;min-height:76px}
+  .m-card b{display:block;width:24px;height:24px;border-radius:7px;margin-bottom:8px}
+  .m-wa{position:absolute;right:18px;bottom:18px;width:42px;height:42px;border-radius:50%;background:#25D366;display:grid;place-items:center;color:#fff;transform:scale(0);transition:transform .5s cubic-bezier(.3,1.6,.5,1)}
+  .m-wa svg{width:22px;height:22px}
+  .live .m-wa{transform:scale(1)}
+  /* wireframe placeholders (bars) */
+  .ph{display:block;height:9px;border-radius:5px;background:#262a37;margin-top:7px;transition:opacity .4s}
+  .filled .ph{display:none}
+  .txt{display:none}
+  .filled .txt{display:inline}
+  .filled h4 .txt,.filled p .txt{display:block}
+  /* styled */
+  .styled .wf{border-style:solid;border-color:#262a37;color:var(--text)}
+  .styled .m-nav{background:#13151d}
+  .styled .m-hero{background:linear-gradient(135deg,#1b1e29,#12141b);border-color:transparent}
+  .styled .m-hero::after{content:"";position:absolute;right:-50px;top:-50px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,var(--acc),transparent 65%);opacity:.35;transition:background .4s}
+  .styled .m-hero h4 .hi{color:var(--acc);transition:color .4s}
+  .styled .m-hero p{color:var(--muted)}
+  .styled .m-btn{background:var(--acc);color:#07080B;border-color:transparent;transition:background .4s}
+  .styled .m-card{background:#13151d}
+  .styled .m-card b{background:color-mix(in srgb,var(--acc) 22%,transparent)}
+  .styled .m-logo .hi{color:var(--acc)}
+  .wf .m-btn{border:1px dashed #3a3f52;min-width:90px;min-height:30px}
+  .styled .wf .m-btn{border:0}
+  .m-card b{border:1px dashed #3a3f52}
+  .styled .m-card b{border:0}
+
+  .term{position:absolute;left:-46px;bottom:0;width:min(420px,80%);background:rgba(8,9,12,.92);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:0 30px 60px -20px rgba(0,0,0,.9);z-index:3}
+  .term-bar{display:flex;justify-content:space-between;padding:8px 12px;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:11px;color:var(--dim)}
+  .term-bar b{color:var(--lime);font-weight:400}
+  .term pre{font-family:var(--mono);font-size:12px;line-height:1.7;padding:12px 14px;height:178px;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;color:#c5c9d6;white-space:pre-wrap}
+  .term .p{color:var(--violet)} .term .ok{color:var(--lime)} .term .cm{color:var(--dim)}
+  .term .caret{display:inline-block;width:7px;height:13px;background:var(--lime);vertical-align:-2px;animation:blink 1s steps(1) infinite}
+  .online{position:absolute;right:-14px;top:-16px;z-index:4;font-family:var(--mono);font-size:12px;font-weight:500;background:#0e1a07;color:var(--lime);border:1px solid rgba(200,255,69,.4);padding:7px 13px;border-radius:999px;display:flex;align-items:center;gap:8px;opacity:0;transform:scale(.6);transition:.5s cubic-bezier(.3,1.6,.5,1)}
+  .online.on{opacity:1;transform:none}
+
+  /* ===== PORTFOLIO ===== */
+  .work{display:grid;grid-template-columns:1.25fr 1fr;gap:18px;perspective:1400px}
+  .case{overflow:hidden;display:flex;flex-direction:column;transform-style:preserve-3d}
+  .case-visual{aspect-ratio:16/10;position:relative;overflow:hidden;display:grid;place-items:center}
+  .tb{background:radial-gradient(ellipse at 30% 20%,#2a2419,#0b0a08 70%)}
+  .tb-mono{font-family:var(--head);font-weight:400;font-size:clamp(70px,9vw,120px);letter-spacing:-.06em;background:linear-gradient(135deg,#f3e2c3,#b89a6a 55%,#e9d3a8);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1;text-align:center}
+  .tb-sub{text-align:center;font-size:12px;letter-spacing:.5em;color:#cdb68b;text-transform:uppercase;margin-top:10px}
+  .tb .shine{position:absolute;inset:0;background:linear-gradient(105deg,transparent 40%,rgba(255,240,210,.12) 50%,transparent 60%);transform:translateX(-100%);animation:shine 5s ease-in-out infinite}
+  @keyframes shine{60%,100%{transform:translateX(100%)}}
+  .case-body{padding:28px 30px 32px;display:flex;flex-direction:column;gap:12px;flex:1}
+  .case-meta{display:flex;gap:8px;flex-wrap:wrap}
+  .case-meta span{font-family:var(--mono);font-size:12px;color:var(--muted);border:1px solid var(--line);padding:4px 10px;border-radius:999px}
+  .case h3{font-family:var(--head);font-size:28px;font-weight:600;letter-spacing:-.025em}
+  .case p{color:var(--muted);font-size:16px}
+  .case a.lnk{margin-top:auto;display:inline-flex;align-items:center;gap:8px;color:var(--lime);font-weight:600;font-size:15px;padding-top:8px;transition:gap .2s}
+  .case a.lnk:hover{gap:12px}
+  .code-vis{background:#0b0d12;padding:26px;place-items:stretch;font-family:var(--mono);font-size:13px;line-height:1.75;color:#7d8499}
+  .code-vis .k{color:var(--violet)}.code-vis .s{color:var(--lime)}.code-vis .c{color:#4a5063}.code-vis .f{color:#e8eaf0}
+  .slot{border:1px dashed #333849;border-radius:var(--radius);display:grid;place-items:center;text-align:center;padding:40px;grid-column:1/-1;background:rgba(7,8,11,.5);backdrop-filter:blur(6px)}
+  .slot h3{font-family:var(--head);font-size:26px;font-weight:600;letter-spacing:-.02em;margin:8px 0}
+  .slot p{color:var(--muted);max-width:460px;margin:0 auto 22px}
+
+  /* ===== WHY ===== */
+  .why{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:start}
+  .why-item{display:grid;grid-template-columns:44px 1fr;gap:18px;padding:26px 0;border-top:1px solid var(--line)}
+  .why-item:last-child{border-bottom:1px solid var(--line)}
+  .why-item svg{width:24px;height:24px;color:var(--lime);margin-top:3px}
+  .why-item h4{font-family:var(--head);font-size:21px;font-weight:600;letter-spacing:-.02em;margin-bottom:4px}
+  .why-item p{color:var(--muted);font-size:15.5px}
+  .about-card{padding:36px;position:sticky;top:110px}
+  .avatar{width:64px;height:64px;border-radius:18px;background:linear-gradient(135deg,var(--lime),#8fd11a);color:#07080B;display:grid;place-items:center;font-family:var(--head);font-weight:800;font-size:22px;margin-bottom:22px}
+  .about-card h3{font-family:var(--head);font-size:26px;font-weight:600;letter-spacing:-.02em}
+  .about-card .role{color:var(--lime);font-family:var(--mono);font-size:13px;margin:4px 0 18px}
+  .about-card p{color:var(--muted);font-size:16px;margin-bottom:14px}
+  .stack{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}
+  .stack span{font-family:var(--mono);font-size:12px;padding:5px 11px;border-radius:8px;background:#1b1e29;color:#c5c9d6}
+
+
+  /* ===== AVALIAÇÃO GOOGLE ===== */
+  .rev-box{display:grid;grid-template-columns:1.2fr .8fr;gap:50px;align-items:center;padding:56px;position:relative;overflow:hidden}
+  .rev-box::before{content:"";position:absolute;right:-120px;top:-120px;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(200,255,69,.16),transparent 70%)}
+  .g-badge{display:inline-flex;align-items:center;gap:12px;font-family:var(--mono);font-size:13px;color:var(--muted);border:1px solid var(--line);padding:8px 14px;border-radius:999px;background:rgba(7,8,11,.5)}
+  .g-badge svg{width:18px;height:18px}
+  .rev-stars{display:flex;gap:6px;margin:22px 0 4px}
+  .rev-stars svg{width:38px;height:38px;color:#2a2e3b;transition:color .25s,transform .25s}
+  .rev-stars.lit svg{color:#FFC93C;filter:drop-shadow(0 0 10px rgba(255,201,60,.5))}
+  .rev-stars.lit svg:nth-child(1){transition-delay:0s}.rev-stars.lit svg:nth-child(2){transition-delay:.12s}.rev-stars.lit svg:nth-child(3){transition-delay:.24s}.rev-stars.lit svg:nth-child(4){transition-delay:.36s}.rev-stars.lit svg:nth-child(5){transition-delay:.48s}
+  .rev-box h2{font-size:clamp(32px,3.6vw,48px)}
+  .rev-box p.sub{color:var(--muted);margin:16px 0 28px;max-width:480px}
+  .qr-card{justify-self:center;background:#fff;border-radius:22px;padding:22px;text-align:center;color:#07080B;box-shadow:0 30px 60px -20px rgba(0,0,0,.7);position:relative}
+  
+  .qr-card small{display:block;font-family:var(--mono);font-size:12px;margin-top:12px;color:#5D6375}
+  @media (max-width:980px){.rev-box{grid-template-columns:1fr;padding:34px 26px}.qr-card{display:none}}
+
+  /* ===== FAQ ===== */
+  .faq{max-width:860px}
+  details{border-bottom:1px solid var(--line)}
+  summary{list-style:none;cursor:pointer;padding:26px 0;display:flex;justify-content:space-between;align-items:center;gap:20px;font-family:var(--head);font-size:21px;font-weight:600;letter-spacing:-.02em}
+  summary::-webkit-details-marker{display:none}
+  summary .pm{width:34px;height:34px;flex:none;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;transition:transform .3s,background .3s,color .3s;color:var(--muted)}
+  details[open] summary .pm{transform:rotate(45deg);background:var(--lime);color:#000;border-color:var(--lime)}
+  details p{color:var(--muted);padding:0 60px 26px 0;font-size:16.5px}
+
+  /* ===== CTA ===== */
+  .cta{padding:60px 0 140px}
+  .cta-box{position:relative;border-radius:30px;padding:80px 60px;overflow:hidden;background:var(--lime);color:#07080B;display:grid;grid-template-columns:1.1fr .9fr;gap:50px;align-items:center}
+  .cta-box::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(0,0,0,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,.07) 1px,transparent 1px);background-size:44px 44px;mask-image:radial-gradient(ellipse at 80% 50%,#000,transparent 70%)}
+  .cta-box > *{position:relative}
+  .cta-box h2{color:#07080B;font-size:clamp(38px,5vw,64px)}
+  .cta-box .sub{font-size:19px;margin-top:18px;opacity:.75;max-width:460px}
+  form{background:#07080B;color:var(--text);border-radius:22px;padding:30px;display:grid;gap:14px}
+  form label{font-size:13px;color:var(--muted);display:grid;gap:7px;font-family:var(--mono)}
+  form input,form textarea,form select{font-family:var(--body);font-size:16px;color:var(--text);background:var(--card-s);border:1px solid var(--line);border-radius:12px;padding:13px 15px;outline:none;transition:border-color .2s}
+  form input:focus,form textarea:focus,form select:focus{border-color:var(--lime)}
+  form textarea{resize:vertical;min-height:90px}
+  form .btn{justify-content:center;margin-top:4px;padding:15px}
+  .form-alt{font-size:13px;color:var(--dim);text-align:center}
+  .form-alt a{color:var(--lime)}
+
+  footer{border-top:1px solid var(--line);padding:50px 0 40px;background:rgba(7,8,11,.6)}
+  .foot{display:grid;grid-template-columns:1.2fr .8fr 1.2fr;gap:50px;align-items:start}
+  .foot-brand p{color:var(--muted);font-size:15px;margin-top:16px;max-width:300px}
+  .foot-col{display:flex;flex-direction:column;gap:12px}
+  .foot-col h5{font-family:var(--mono);font-size:12px;font-weight:500;color:var(--lime);letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px}
+  .foot-col > a:not(.ct){color:var(--muted);font-size:15px;transition:color .2s}
+  .foot-col > a:not(.ct):hover{color:var(--lime)}
+  .ct{display:flex;align-items:center;gap:12px;font-size:15px;color:var(--text);transition:color .2s}
+  .ct:hover{color:var(--lime)}
+  .ct small{display:block;font-family:var(--mono);font-size:11px;color:var(--dim);line-height:1.3}
+  .ct-ic{width:38px;height:38px;flex:none;border-radius:11px;background:rgba(200,255,69,.1);color:var(--lime);display:grid;place-items:center;transition:background .2s,color .2s}
+  .ct-ic svg{width:18px;height:18px}
+  .ct:hover .ct-ic{background:var(--lime);color:#07080B}
+  .ct-list{display:grid;gap:14px;margin:22px 0 6px}
+  .avatar{font-size:15px!important;letter-spacing:-.03em}
+  .big-word{font-family:var(--head);font-weight:800;font-size:clamp(48px,12.5vw,190px);letter-spacing:-.06em;line-height:.85;white-space:nowrap;color:transparent;-webkit-text-stroke:1px #2b2f3d;margin-top:50px;text-align:center;user-select:none;background:linear-gradient(90deg,transparent 0%,rgba(200,255,69,.9) 50%,transparent 100%) no-repeat;background-size:30% 100%;-webkit-background-clip:text;background-clip:text;animation:sweep 6s linear infinite}
+  @keyframes sweep{from{background-position:-60% 0}to{background-position:160% 0}}
+  .copy{color:var(--dim);font-size:14px;margin-top:30px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+
+  .wa{position:fixed;right:22px;bottom:22px;z-index:65;width:58px;height:58px;border-radius:50%;background:#25D366;color:#fff;display:none;place-items:center;box-shadow:0 12px 30px -8px rgba(37,211,102,.6);transition:transform .2s}
+  .wa:hover{transform:scale(1.08)}
+  .wa svg{width:30px;height:30px}
+
+  /* reveal */
+  .rv{opacity:0;transform:translateY(34px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1)}
+  .rv.in{opacity:1;transform:none}
+  .d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}
+
+  @media (max-width:1100px){.hud-side{display:none}}
+  @media (max-width:980px){
+    .hero-grid,.why,.cta-box,.work,.build-grid{grid-template-columns:1fr}
+    .orbit{display:none}
+    .problem{grid-template-columns:1fr}
+    .services{grid-template-columns:1fr}
+    .svc,.svc.big{grid-column:auto}
+    .about-card{position:static}
+    .cta-box{padding:50px 28px}
+    .nav-links{display:none}
+    .nav-links.open{display:flex;position:absolute;top:74px;left:0;right:0;flex-direction:column;gap:0;background:rgba(7,8,11,.97);border-bottom:1px solid var(--line);padding:10px 4vw 20px}
+    .nav-links.open a{padding:14px 0;border-bottom:1px solid var(--line);color:var(--text)}
+    .menu-btn{display:block}
+    .nav-cta{display:none}
+    .sec{padding:100px 0}
+    .hud-read{display:none}
+    .foot{grid-template-columns:1fr;gap:34px}
+    .scroll-hint{display:none}
+    /* build mobile */
+    .build-grid{gap:18px;align-content:center}
+    .build h2{font-size:30px;margin-bottom:12px}
+    .build .eyebrow{margin-bottom:8px}
+    .steps{padding-left:22px}
+    .step{display:none;padding:0}
+    .step.on{display:block}
+    .step-t{font-size:19px}
+    .step-t::before{left:-23px}
+    .steps::before,.steps .rail{display:none}
+    .bprog{margin-top:10px}
+    .stage{padding-bottom:110px}
+    .msite{min-height:250px;padding:12px;gap:9px}
+    .m-hero{padding:16px;min-height:120px}
+    .m-hero h4{font-size:20px}
+    .m-hero p{font-size:11px}
+    .m-card{min-height:56px;padding:10px;font-size:10.5px}
+    .term{left:-8px;width:88%}
+    .term pre{height:118px;font-size:10.5px;padding:9px 11px}
+    .online{right:-4px}
+  }
+  @media (max-width:560px){
+    .ct span:last-child{word-break:break-all}
+    .m-links{display:none}
+    details p{padding-right:0}
+  }
+  @media (max-height:760px) and (min-width:981px){.msite{min-height:320px}.m-hero{min-height:130px}.term pre{height:140px}}
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important}
+    .rv{opacity:1;transform:none}
+  }
+
+  /* ===== E-BOOK (produto) ===== */
+  .ebook-box{display:grid;grid-template-columns:.85fr 1.15fr;gap:56px;align-items:center;padding:56px;position:relative;overflow:hidden}
+  .ebook-box::before{content:"";position:absolute;width:460px;height:460px;border-radius:50%;background:var(--lime);filter:blur(150px);opacity:.10;left:-140px;bottom:-200px;pointer-events:none}
+  .eb-stage{perspective:1400px;display:grid;place-items:center}
+  .eb-book{position:relative;width:min(340px,70vw);aspect-ratio:1/1;transform:rotateY(-22deg) rotateX(6deg);transform-style:preserve-3d;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+  .ebook-box:hover .eb-book{transform:rotateY(-8deg) rotateX(2deg) translateY(-6px)}
+  .eb-book img{width:100%;height:100%;object-fit:cover;border-radius:6px 14px 14px 6px;box-shadow:0 40px 80px -24px rgba(0,0,0,.85),0 0 0 1px rgba(255,255,255,.06);display:block;position:relative;z-index:2}
+  .eb-book::before{content:"";position:absolute;top:2%;bottom:2%;right:-15px;width:17px;background:repeating-linear-gradient(90deg,#e9ecf2 0 2px,#c9ced8 2px 3px);transform:rotateY(80deg);transform-origin:left;border-radius:0 3px 3px 0}
+  .eb-badge{position:absolute;top:-14px;right:-14px;z-index:3;font-family:var(--mono);font-size:12px;background:var(--lime);color:#07080B;font-weight:500;padding:7px 12px;border-radius:999px;transform:rotate(6deg)}
+  .ebook-box h2{font-size:clamp(32px,3.8vw,50px);margin-bottom:18px}
+  .ebook-box p.lead2{color:var(--muted);max-width:520px}
+  .eb-list{list-style:none;display:grid;gap:10px;margin:26px 0 32px}
+  .eb-list li{display:flex;gap:12px;color:var(--muted);font-size:16px}
+  .eb-list li svg{flex:none;width:19px;height:19px;color:var(--lime);margin-top:3px}
+  .eb-list li strong{color:var(--text);font-weight:600}
+  .eb-cta{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+  .eb-cta small{font-family:var(--mono);font-size:12px;color:var(--dim)}
+  @media (max-width:980px){.ebook-box{grid-template-columns:1fr;padding:34px 24px;gap:40px}.eb-book{width:min(260px,64vw)}}
+</style>
+</head>
+<body>
+<canvas id="gl" aria-hidden="true"></canvas>
+<div class="gl-fallback"></div>
+<div class="scanlines"></div>
+<div class="topbar" id="topbar"></div>
+<div class="cur" id="cur"></div><div class="cur-ring" id="ring"></div>
+
+<div class="hud-side" id="hudSide">
+  <a href="#topo" data-for="topo"><span>00 · INÍCIO</span><i></i></a>
+  <a href="#problema" data-for="problema"><span>01 · PROBLEMA</span><i></i></a>
+  <a href="#servicos" data-for="servicos"><span>02 · SERVIÇOS</span><i></i></a>
+  <a href="#processo" data-for="processo"><span>03 · PROCESSO</span><i></i></a>
+  <a href="#portfolio" data-for="portfolio"><span>04 · PORTFÓLIO</span><i></i></a>
+  <a href="#ebook" data-for="ebook"><span>05 · E-BOOK</span><i></i></a>
+  <a href="#sobre" data-for="sobre"><span>06 · SOBRE</span><i></i></a>
+  <a href="#contato" data-for="contato"><span>07 · CONTATO</span><i></i></a>
+</div>
+<div class="hud-read"><span>SCROLL <b id="hPct">000%</b></span><span>FORMA <b id="hShape">ESFERA</b></span><span>FPS <b id="hFps">--</b></span></div>
+
+<nav id="nav">
+  <div class="wrap nav-in">
+    <a href="#topo" class="logo"><div class="logo-mark">BDR</div>BDR<span>Digital</span></a>
+    <div class="nav-links" id="links">
+      <a href="#servicos">Serviços</a>
+      <a href="#processo">Como funciona</a>
+      <a href="#portfolio">Portfólio</a>
+      <a href="#ebook">E-book</a>
+      <a href="#sobre">Sobre</a>
+      <a href="#faq">Dúvidas</a>
+    </div>
+    <a href="#contato" class="btn btn-lime nav-cta mag">Quero minha prévia</a>
+    <button class="menu-btn" id="menuBtn" aria-label="Abrir menu">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<header class="hero" id="topo" data-shape="0" data-x="2.3" data-o="1">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="tag rv"><span class="dot"></span><span class="scr">Aceitando novos projetos</span></span>
+      <h1 class="rv d1">Seu negócio merece um <span class="hl scr">site de verdade.</span></h1>
+      <p class="lead rv d2">Sites, landing pages e automações para <span class="rotator" id="rot">estéticas</span>.<br>
+      Você <strong>vê a prévia do seu site antes de pagar qualquer coisa</strong>. Gostou, a gente coloca no ar.</p>
+      <div class="hero-cta rv d3">
+        <a href="#contato" class="btn btn-lime mag">Quero minha prévia grátis
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a href="#processo" class="btn btn-ghost mag">Ver como funciona</a>
+      </div>
+      <div class="hero-note rv d3">
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12l5 5L20 7"/></svg>Prévia sem compromisso</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12l5 5L20 7"/></svg>Domínio .com.br próprio</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12l5 5L20 7"/></svg>Perfeito no celular</span>
+      </div>
+    </div>
+    <div class="orbit" aria-hidden="true">
+      <div class="chip c1">render <b>WebGL</b></div>
+      <div class="chip c2">partículas <b id="cPart">0</b></div>
+      <div class="chip c3">shaders <b>GLSL</b></div>
+      <div class="chip c4">fps <b id="cFps">--</b></div>
+    </div>
+  </div>
+  <div class="scroll-hint"><span>ROLE</span><i></i></div>
+</header>
+
+<div class="marquee" aria-hidden="true">
+  <div class="track">
+    <span>Sites institucionais</span><span>Landing pages</span><span>Botão de WhatsApp</span><span>Google Meu Negócio</span><span>Domínio próprio</span><span>Automação em Python</span><span>Robôs para planilhas</span>
+    <span>Sites institucionais</span><span>Landing pages</span><span>Botão de WhatsApp</span><span>Google Meu Negócio</span><span>Domínio próprio</span><span>Automação em Python</span><span>Robôs para planilhas</span>
+  </div>
+</div>
+
+<!-- ===== PROBLEM ===== -->
+<section class="sec" id="problema" data-shape="1" data-x="0" data-o=".55">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><span class="eyebrow rv scr">// o problema</span>
+      <h2 class="rv d1">Instagram não é site. <em>E o seu cliente sabe disso.</em></h2></div>
+      <p class="rv d2">Quem procura um serviço no Google quer achar endereço, serviços e um jeito fácil de chamar. Se não acha, chama o concorrente.</p>
+    </div>
+    <div class="problem">
+      <div class="pcard glass rv"><div class="pnum">01</div><p><strong>Você some no Google.</strong> Sem site, sua empresa depende só do algoritmo das redes para ser encontrada.</p></div>
+      <div class="pcard glass rv d1"><div class="pnum">02</div><p><strong>Parece menos profissional.</strong> Um link de Linktree passa a impressão de negócio improvisado, mesmo quando o serviço é excelente.</p></div>
+      <div class="pcard glass rv d2"><div class="pnum">03</div><p><strong>Informação espalhada.</strong> Preço no destaque, endereço na bio, horário no stories. O cliente desiste antes de chamar.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SERVICES ===== -->
+<section class="sec" id="servicos" data-shape="2" data-x="0" data-o=".75" style="padding-top:40px">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><span class="eyebrow rv scr">// serviços</span>
+      <h2 class="rv d1">O que a BDR Digital faz pelo seu negócio</h2></div>
+    </div>
+    <div class="services">
+      <div class="svc big glass tilt rv">
+        <div class="svc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M7 6.5h.01M10 6.5h.01"/></svg></div>
+        <h3>Site institucional</h3>
+        <p>Um site completo com a cara da sua marca: serviços, fotos, localização, avaliações e contato. Feito para converter visita em cliente.</p>
+        <ul><li>Design sob medida</li><li>Mapa e horários</li><li>Galeria</li><li>SEO básico</li></ul>
+      </div>
+      <div class="svc big glass tilt rv d1">
+        <div class="svc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/></svg></div>
+        <h3>Landing page</h3>
+        <p>Uma página única e direta, ideal para divulgar um serviço, curso ou promoção e levar o visitante direto ao WhatsApp.</p>
+        <ul><li>Entrega rápida</li><li>Foco em conversão</li><li>Pronta para anúncios</li></ul>
+      </div>
+      <div class="svc glass tilt rv">
+        <div class="svc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="10" r="3"/><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11Z"/></svg></div>
+        <h3>Presença no Google</h3>
+        <p>Cadastro e ajuste do perfil da empresa no Google, com QR code para coletar avaliações dos clientes.</p>
+      </div>
+      <div class="svc glass tilt rv d1">
+        <div class="svc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7V5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2M9 20h6M12 4v16"/></svg></div>
+        <h3>Domínio e hospedagem</h3>
+        <p>Cuido do registro do seu .com.br, da configuração e de deixar tudo no ar com cadeado de segurança.</p>
+      </div>
+      <div class="svc glass tilt rv d2">
+        <div class="svc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m8 9-4 3 4 3M16 9l4 3-4 3M14 5l-4 14"/></svg></div>
+        <h3>Automações</h3>
+        <p>Robôs em Python para planilhas, relatórios e avisos por e-mail. Menos tarefa repetitiva, mais tempo para o que importa.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PINNED BUILD ===== -->
+<section class="build" id="processo" data-shape="3" data-x="0" data-o=".22">
+  <div class="build-sticky">
+    <div class="wrap build-grid">
+      <div>
+        <span class="eyebrow scr">// como funciona · role devagar</span>
+        <h2>Veja um site <em>nascendo.</em></h2>
+        <ol class="steps" id="steps">
+          <div class="rail" id="rail"></div>
+          <li class="step on"><div class="step-t"><small>01</small>A gente conversa</div><p>Você me conta o que faz e manda as fotos e informações que já tem.</p></li>
+          <li class="step"><div class="step-t"><small>02</small>Você vê a prévia <span class="free">GRÁTIS</span></div><p>Monto uma prévia real do seu site e te mando o link e um vídeo.</p></li>
+          <li class="step"><div class="step-t"><small>03</small>Ajustamos juntos</div><p>Cores, textos, fotos e serviços. Mexo até ficar do seu jeito.</p></li>
+          <li class="step"><div class="step-t"><small>04</small>Site no ar</div><p>Domínio registrado, HTTPS ativo e seu negócio pronto para ser encontrado.</p></li>
+        </ol>
+        <div class="bprog"><span>BUILD</span><div class="bar-o"><div class="bar-i" id="bbar"></div></div><span id="bpct">000%</span></div>
+      </div>
+
+      <div class="stage">
+        <div class="online" id="online"><span class="dot"></span>ONLINE</div>
+        <div class="browser" id="bw">
+          <div class="bbar"><i></i><i></i><i></i>
+            <div class="burl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span id="burl">localhost:3000</span></div>
+          </div>
+          <div class="msite" id="msite">
+            <div class="m-nav wf mel" data-at=".04"><span class="m-logo"><span class="txt">Estética <span class="hi">Aurora</span></span><span class="ph" style="width:70px;margin:0"></span></span><span class="m-links"><span class="txt">Serviços · Sobre · Contato</span><span class="ph" style="width:110px;margin:0"></span></span></div>
+            <div class="m-hero wf mel" data-at=".09">
+              <h4><span class="txt">Sua pele em <span class="hi">boas mãos.</span></span><span class="ph" style="width:80%;height:16px"></span><span class="ph" style="width:55%;height:16px"></span></h4>
+              <p><span class="txt">Limpeza de pele, massagens e sobrancelhas no coração da cidade.</span><span class="ph" style="width:65%"></span></p>
+              <span class="m-btn"><span class="txt">Agendar pelo WhatsApp</span></span>
+            </div>
+            <div class="m-cards">
+              <div class="m-card wf mel" data-at=".14"><b></b><span class="txt">Limpeza de pele</span><span class="ph"></span><span class="ph" style="width:60%"></span></div>
+              <div class="m-card wf mel" data-at=".17"><b></b><span class="txt">Massagens</span><span class="ph"></span><span class="ph" style="width:60%"></span></div>
+              <div class="m-card wf mel" data-at=".20"><b></b><span class="txt">Sobrancelhas</span><span class="ph"></span><span class="ph" style="width:60%"></span></div>
+            </div>
+            <div class="m-wa"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Z"/></svg></div>
+          </div>
+        </div>
+        <div class="term">
+          <div class="term-bar"><span>zsh — <b>bdr-digital</b></span><span>~/clientes</span></div>
+          <pre id="term"></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PORTFOLIO ===== -->
+<section class="sec" id="portfolio" data-shape="1" data-x="0" data-o=".45">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><span class="eyebrow rv scr">// portfólio</span>
+      <h2 class="rv d1">Trabalhos recentes</h2></div>
+    </div>
+    <div class="work">
+      <article class="case glass tilt rv">
+        <div class="case-visual tb"><div class="shine"></div><div><div class="tb-mono">TB</div><div class="tb-sub">Studio Tatiane Belloni</div></div></div>
+        <div class="case-body">
+          <div class="case-meta"><span>Site institucional</span><span>Estética &amp; Maquiagem</span><span>Curitiba</span></div>
+          <h3>Studio Tatiane Belloni</h3>
+          <p>Site para um studio de estética, maquiagem e cursos com mais de 15 anos de experiência. Visual elegante em preto e champanhe, animações modernas, serviços organizados, curso de automaquiagem em destaque e QR code de avaliação no Google.</p>
+          <a class="lnk" href="https://studiotatianebelloni.com.br" target="_blank" rel="noopener">Ver site ao vivo <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+        </div>
+      </article>
+      <article class="case glass tilt rv d1">
+        <div class="case-visual code-vis"><div>
+<span class="c"># consolida planilhas de várias filiais</span><br>
+<span class="k">import</span> <span class="f">pandas</span> <span class="k">as</span> <span class="f">pd</span><br>
+<span class="k">from</span> <span class="f">pathlib</span> <span class="k">import</span> <span class="f">Path</span><br><br>
+<span class="f">arquivos</span> = <span class="f">Path</span>(<span class="s">"entrada"</span>).glob(<span class="s">"*.xlsx"</span>)<br>
+<span class="f">df</span> = <span class="f">pd</span>.concat(<span class="f">ler</span>(a) <span class="k">for</span> a <span class="k">in</span> <span class="f">arquivos</span>)<br>
+<span class="f">df</span>.to_excel(<span class="s">"consolidado.xlsx"</span>)<br>
+<span class="c"># ✓ pronto em segundos</span></div></div>
+        <div class="case-body">
+          <div class="case-meta"><span>Automação</span><span>Python</span></div>
+          <h3>Robôs de planilhas e avisos</h3>
+          <p>Consolidador de planilhas que junta arquivos de várias fontes num relatório único, e robô que envia avisos de cobrança por e-mail automaticamente.</p>
+          <a class="lnk" href="https://github.com/luccabdr" target="_blank" rel="noopener">Ver no GitHub <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+        </div>
+      </article>
+      <div class="slot rv">
+        <div>
+          <span class="eyebrow" style="margin:0">// este site também é portfólio</span>
+          <h3>Gostou do que viu até aqui?</h3>
+          <p>Este site foi feito do zero pela BDR Digital: WebGL, shaders e animações guiadas pela rolagem, sem template. O seu pode ser o próximo.</p>
+          <a href="#contato" class="btn btn-lime mag">Quero o meu</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== E-BOOK ===== -->
+<section class="sec" id="ebook" data-shape="3" data-x="0" data-o=".3" style="padding-top:40px">
+  <div class="wrap">
+    <div class="ebook-box glass rv">
+      <a href="ebook/" class="eb-stage" aria-label="Ver a página do e-book">
+        <div class="eb-book">
+          <img src="ebook/capa.png" alt="Capa do e-book Automatize suas Planilhas com Python e IA" width="1080" height="1080" loading="lazy">
+          <span class="eb-badge">NOVO</span>
+        </div>
+      </a>
+      <div>
+        <span class="eyebrow scr">// e-book da BDR Digital</span>
+        <h2>Automatize suas planilhas com <span style="color:var(--lime)">Python e IA.</span></h2>
+        <p class="lead2">Os mesmos robôs que a BDR usa em automação, explicados passo a passo para quem nunca programou. Você usa a IA para escrever o código e coloca seu primeiro robô para rodar.</p>
+        <ul class="eb-list">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12l5 5L20 7"/></svg><span><strong>8 capítulos práticos</strong>, do zero até o robô rodando sozinho</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12l5 5L20 7"/></svg><span><strong>3 robôs prontos:</strong> juntar planilhas, relatório automático e avisos de cobrança</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12l5 5L20 7"/></svg><span><strong>Prompts prontos</strong> pra IA adaptar cada robô à sua rotina</span></li>
+        </ul>
+        <div class="eb-cta">
+          <a href="ebook/" class="btn btn-lime mag">Conhecer o e-book
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <small>acesso imediato · 7 dias de garantia</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== WHY / ABOUT ===== -->
+<section class="sec" id="sobre" data-shape="0" data-x="-2.6" data-o=".4" style="padding-top:40px">
+  <div class="wrap why">
+    <div>
+      <span class="eyebrow rv scr">// por que a BDR</span>
+      <h2 class="rv d1" style="margin-bottom:44px">Feito por gente, <em>não por template.</em></h2>
+      <div>
+        <div class="why-item rv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg><div><h4>Prévia antes de pagar</h4><p>Você só fecha depois de ver o seu site pronto. Zero risco de comprar no escuro.</p></div></div>
+        <div class="why-item rv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg><div><h4>Pensado para o celular</h4><p>A maioria dos seus clientes vai abrir o site no celular. Ele é desenhado primeiro para isso.</p></div></div>
+        <div class="why-item rv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/></svg><div><h4>Leve e rápido</h4><p>Código limpo, sem plugins pesados. Carrega rápido e não quebra do nada.</p></div></div>
+        <div class="why-item rv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/></svg><div><h4>Atendimento direto</h4><p>Você fala direto com quem cria o seu site. Sem intermediário e sem enrolação.</p></div></div>
+      </div>
+    </div>
+    <aside class="about-card glass rv d1">
+      <div class="avatar">BDR</div>
+      <h3>BDR Digital</h3>
+      <div class="role">sites · landing pages · automação</div>
+      <p>Um estúdio digital focado em pequenas empresas que ainda não têm presença online. Cada projeto é feito do zero, com código próprio, pensado para o seu cliente achar você e chamar no WhatsApp.</p>
+      <div class="ct-list">
+        <a class="ct" href="https://wa.me/5541995359738" target="_blank" rel="noopener"><span class="ct-ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.5 12.4c-.3-.1-1.8-.9-2-1s-.5-.1-.7.1-.8 1-1 1.2-.4.2-.7.1a8.2 8.2 0 0 1-4-3.5c-.3-.5.3-.5.9-1.6.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6a1.1 1.1 0 0 0-.8.4 3.4 3.4 0 0 0-1 2.5c0 1.5 1.1 2.9 1.2 3.1a13.4 13.4 0 0 0 5.2 4.6c1.9.8 2.7.9 3.6.7a3.1 3.1 0 0 0 2-1.4c.2-.5.2-1 .2-1.4-.1-.1-.3-.2-.6-.3Z"/></svg></span><span><small>WhatsApp</small>(41) 99535-9738</span></a>
+        <a class="ct" href="mailto:bdrdigital.studio@gmail.com"><span class="ct-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span><span><small>E-mail</small>bdrdigital.studio@gmail.com</span></a>
+        <a class="ct" href="https://instagram.com/bdrdigital_" target="_blank" rel="noopener"><span class="ct-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6" fill="currentColor"/></svg></span><span><small>Instagram</small>@bdrdigital_</span></a>
+      </div>
+      <div class="stack"><span>HTML/CSS</span><span>JavaScript</span><span>WebGL</span><span>Python</span><span>Automação</span><span>SEO</span></div>
+    </aside>
+  </div>
+</section>
+
+<!-- ===== AVALIAÇÃO ===== -->
+<section class="sec" id="avaliar" data-shape="4" data-x="0" data-o=".35" style="padding-top:0">
+  <div class="wrap">
+    <div class="rev-box glass rv">
+      <div>
+        <span class="g-badge"><svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.6 12.3c0-.8-.1-1.5-.2-2.3H12v4.3h5.9a5 5 0 0 1-2.2 3.3v2.7h3.6c2.1-1.9 3.3-4.8 3.3-8Z"/><path fill="#34A853" d="M12 23c3 0 5.5-1 7.3-2.7l-3.6-2.7c-1 .7-2.2 1.1-3.7 1.1a6.4 6.4 0 0 1-6-4.4H2.3v2.8A11 11 0 0 0 12 23Z"/><path fill="#FBBC05" d="M6 14.3a6.6 6.6 0 0 1 0-4.2V7.3H2.3a11 11 0 0 0 0 9.8L6 14.3Z"/><path fill="#EA4335" d="M12 5.4c1.6 0 3.1.6 4.2 1.7l3.2-3.2A11 11 0 0 0 2.3 7.3L6 10c.9-2.6 3.3-4.5 6-4.5Z"/></svg>BDR Digital no Google</span>
+        <div class="rev-stars" id="revStars"><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.2 6.8 1-4.9 4.8 1.1 6.8L12 17.6l-6 3.2 1.1-6.8L2.2 9.2l6.8-1Z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.2 6.8 1-4.9 4.8 1.1 6.8L12 17.6l-6 3.2 1.1-6.8L2.2 9.2l6.8-1Z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.2 6.8 1-4.9 4.8 1.1 6.8L12 17.6l-6 3.2 1.1-6.8L2.2 9.2l6.8-1Z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.2 6.8 1-4.9 4.8 1.1 6.8L12 17.6l-6 3.2 1.1-6.8L2.2 9.2l6.8-1Z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.2 6.8 1-4.9 4.8 1.1 6.8L12 17.6l-6 3.2 1.1-6.8L2.2 9.2l6.8-1Z"/></svg></div>
+        <h2>Já fez um site com a gente? <em>Conta pra todo mundo.</em></h2>
+        <p class="sub">Sua avaliação no Google leva menos de um minuto e ajuda outras empresas a encontrarem a BDR Digital.</p>
+        <a class="btn btn-lime mag g-review" href="#" target="_blank" rel="noopener">Avaliar no Google
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+      </div>
+      <div class="qr-card" id="qrCard"><img src="data:image/png;base64,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" alt="QR code para avaliar a BDR Digital no Google" style="width:200px;height:200px;display:block;image-rendering:pixelated"><small>Aponte a câmera do celular</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section class="sec" id="faq" data-shape="2" data-x="0" data-o=".35" style="padding-top:40px">
+  <div class="wrap">
+    <span class="eyebrow rv scr">// dúvidas frequentes</span>
+    <h2 class="rv d1" style="margin-bottom:40px">Perguntas que todo mundo faz</h2>
+    <div class="faq rv d2">
+      <details><summary>A prévia é grátis mesmo?<span class="pm">+</span></summary><p>Sim. Eu monto uma prévia do seu site com as informações e fotos que você já tem (como as do Instagram) e te mostro. Se não gostar, não paga nada.</p></details>
+      <details><summary>Quanto custa um site?<span class="pm">+</span></summary><p>Depende do tamanho: uma landing page é mais simples que um site com várias páginas. Depois de entender o seu negócio, te passo um valor fechado, sem surpresa.</p></details>
+      <details><summary>Quanto tempo leva para ficar pronto?<span class="pm">+</span></summary><p>A prévia sai em poucos dias. Depois dos ajustes, a publicação depende basicamente do registro do domínio, que costuma ser rápido.</p></details>
+      <details><summary>Preciso entender de tecnologia?<span class="pm">+</span></summary><p>Não. Eu cuido do domínio, da publicação e de toda a parte técnica. Você só me passa as informações do seu negócio.</p></details>
+      <details><summary>O site vai ter o meu domínio próprio?<span class="pm">+</span></summary><p>Sim, algo como seunegocio.com.br. O domínio fica registrado no nome da sua empresa.</p></details>
+      <details><summary>Atende fora de Curitiba?<span class="pm">+</span></summary><p>Atendo qualquer cidade. O processo todo é online: conversa, prévia, ajustes e entrega.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section class="cta" id="contato" data-shape="4" data-x="0" data-o=".9">
+  <div class="wrap">
+    <div class="cta-box rv">
+      <div>
+        <h2>Bora tirar seu negócio do “só Instagram”?</h2>
+        <p class="sub">Me conta um pouco da sua empresa e eu te mando uma prévia do seu site. Sem compromisso.</p>
+      </div>
+      <form id="form">
+        <label>Seu nome<input name="nome" required placeholder="Como posso te chamar?"></label>
+        <label>Empresa / Instagram<input name="empresa" required placeholder="@suaempresa"></label>
+        <label>O que você precisa?
+          <select name="tipo">
+            <option>Site institucional</option>
+            <option>Landing page</option>
+            <option>Presença no Google</option>
+            <option>Automação / robô</option>
+            <option>Ainda não sei, quero conversar</option>
+          </select>
+        </label>
+        <label>Mensagem<textarea name="msg" placeholder="Conte rapidinho sobre o seu negócio"></textarea></label>
+        <button class="btn btn-lime" type="submit">Enviar e receber minha prévia
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+        <div class="form-alt">ou chame direto no <a href="https://wa.me/5541995359738" target="_blank" rel="noopener">WhatsApp (41) 99535-9738</a></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer data-shape="4" data-x="0" data-o=".9">
+  <div class="wrap">
+    <div class="foot">
+      <div class="foot-brand">
+        <a href="#topo" class="logo"><div class="logo-mark">BDR</div>BDR<span>Digital</span></a>
+        <p>Sites, landing pages e automações para pequenas empresas.</p>
+      </div>
+      <div class="foot-col">
+        <h5>Navegue</h5>
+        <a href="#servicos">Serviços</a><a href="#processo">Como funciona</a><a href="#portfolio">Portfólio</a><a href="#faq">Dúvidas</a><a class="g-review" href="#" target="_blank" rel="noopener">Avalie no Google ★</a>
+      </div>
+      <div class="foot-col">
+        <h5>Fale com a gente</h5>
+        <a class="ct" href="https://wa.me/5541995359738" target="_blank" rel="noopener"><span class="ct-ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.5 12.4c-.3-.1-1.8-.9-2-1s-.5-.1-.7.1-.8 1-1 1.2-.4.2-.7.1a8.2 8.2 0 0 1-4-3.5c-.3-.5.3-.5.9-1.6.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6a1.1 1.1 0 0 0-.8.4 3.4 3.4 0 0 0-1 2.5c0 1.5 1.1 2.9 1.2 3.1a13.4 13.4 0 0 0 5.2 4.6c1.9.8 2.7.9 3.6.7a3.1 3.1 0 0 0 2-1.4c.2-.5.2-1 .2-1.4-.1-.1-.3-.2-.6-.3Z"/></svg></span><span><small>WhatsApp</small>(41) 99535-9738</span></a>
+        <a class="ct" href="mailto:bdrdigital.studio@gmail.com"><span class="ct-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span><span><small>E-mail</small>bdrdigital.studio@gmail.com</span></a>
+        <a class="ct" href="https://instagram.com/bdrdigital_" target="_blank" rel="noopener"><span class="ct-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6" fill="currentColor"/></svg></span><span><small>Instagram</small>@bdrdigital_</span></a>
+      </div>
+    </div>
+    <div class="big-word" aria-hidden="true">BDR DIGITAL</div>
+    <div class="copy"><span>© <span id="ano"></span> BDR Digital. Todos os direitos reservados.</span><span>Feito com código, não com template.</span></div>
+  </div>
+</footer>
+
+<a class="wa" id="wa" target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
+  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1s-.5-.1-.7.1-.8 1-1 1.2-.4.2-.7.1a8.2 8.2 0 0 1-4-3.5c-.3-.5.3-.5.9-1.6.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6a1.1 1.1 0 0 0-.8.4 3.4 3.4 0 0 0-1 2.5 5.9 5.9 0 0 0 1.2 3.1 13.4 13.4 0 0 0 5.2 4.6c1.9.8 2.7.9 3.6.7a3.1 3.1 0 0 0 2-1.4 2.5 2.5 0 0 0 .2-1.4c-.1-.1-.3-.2-.6-.3ZM12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.3a8.3 8.3 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.3 8.3 0 1 1 12 20.3Z"/></svg>
+</a>
+
+<script>
+/* ================= CONFIGURAÇÃO =================
+   Seu WhatsApp com DDI+DDD, só números (ex: '5541999999999').
+   Vazio = o botão flutuante some e o formulário abre o e-mail. */
+const WHATSAPP = '5541995359738';
+const EMAIL = 'bdrdigital.studio@gmail.com';
+/* Link de avaliação do Google (Perfil da Empresa → "Solicitar avaliações" → copiar link). */
+const GOOGLE_REVIEW_URL = 'https://g.page/r/CcGbQxPr483OEBM/review';
+/* ================================================ */
+
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const FINE = matchMedia('(pointer:fine)').matches;
+const MOBILE = innerWidth < 760;
+$('#ano').textContent = new Date().getFullYear();
+
+/* ---------- nav / menu ---------- */
+const nav = $('#nav');
+$('#menuBtn').onclick = () => $('#links').classList.toggle('open');
+$$('#links a').forEach(a => a.onclick = () => $('#links').classList.remove('open'));
+
+/* ---------- scramble (texto que se decodifica) ---------- */
+const GLYPHS = '!<>-_\\/[]{}—=+*^?#01ABCDEFX';
+function scramble(el){
+  const final = el.dataset.final || (el.dataset.final = el.textContent);
+  let frame = 0; const total = 28;
+  const tick = () => {
+    const prog = frame / total;
+    el.textContent = [...final].map((c,i) => {
+      if (c === ' ') return ' ';
+      return i / final.length < prog ? c : GLYPHS[Math.random()*GLYPHS.length|0];
+    }).join('');
+    if (frame++ < total) requestAnimationFrame(tick); else el.textContent = final;
+  };
+  tick();
+}
+
+/* ---------- reveal ---------- */
+const io = new IntersectionObserver(es => es.forEach(e => {
+  if (!e.isIntersecting) return;
+  e.target.classList.add('in');
+  if (!REDUCED) { if (e.target.classList.contains('scr')) scramble(e.target); e.target.querySelectorAll('.scr').forEach(scramble); }
+  io.unobserve(e.target);
+}), {threshold:.15});
+$$('.rv').forEach(el => io.observe(el));
+$$('.build .scr').forEach(el => io.observe(el));
+
+/* ---------- rotator ---------- */
+const nichos = ['estéticas','lava-cars','studios de beleza','clínicas','pequenas empresas'];
+const rot = $('#rot'); let ri = 0, rj = 0, del = false;
+(function digita(){
+  const t = nichos[ri]; rot.textContent = t.slice(0, rj);
+  if (!del && rj === t.length) { del = true; return setTimeout(digita, 1800); }
+  if (del && rj === 0) { del = false; ri = (ri + 1) % nichos.length; }
+  rj += del ? -1 : 1; setTimeout(digita, del ? 40 : 85);
+})();
+
+/* ---------- cursor + magnético + tilt ---------- */
+let mx = innerWidth/2, my = innerHeight/2, nmx = 0, nmy = 0;
+addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; nmx = mx/innerWidth*2-1; nmy = my/innerHeight*2-1; }, {passive:true});
+if (FINE && !REDUCED) {
+  document.body.classList.add('has-cursor');
+  const cur = $('#cur'), ring = $('#ring'); let rx = mx, ry = my;
+  (function loop(){ rx += (mx-rx)*.18; ry += (my-ry)*.18;
+    cur.style.transform = `translate(${mx}px,${my}px) translate(-50%,-50%)`;
+    ring.style.transform = `translate(${rx}px,${ry}px) translate(-50%,-50%)`;
+    requestAnimationFrame(loop); })();
+  $$('a,button,summary,input,select,textarea,.tilt').forEach(el => {
+    el.addEventListener('mouseenter', () => ring.classList.add('big'));
+    el.addEventListener('mouseleave', () => ring.classList.remove('big'));
+  });
+  $$('.mag').forEach(b => {
+    b.addEventListener('mousemove', e => { const r = b.getBoundingClientRect();
+      b.style.transform = `translate(${(e.clientX-r.left-r.width/2)*.25}px,${(e.clientY-r.top-r.height/2)*.35}px)`; });
+    b.addEventListener('mouseleave', () => { b.style.transition = 'transform .4s'; b.style.transform = ''; setTimeout(()=>b.style.transition='',400); });
+  });
+  $$('.tilt').forEach(c => {
+    c.addEventListener('mousemove', e => { const r = c.getBoundingClientRect();
+      const px = (e.clientX-r.left)/r.width - .5, py = (e.clientY-r.top)/r.height - .5;
+      c.style.transform = `rotateY(${px*8}deg) rotateX(${-py*8}deg) translateZ(0)`;
+      c.style.setProperty('--mx', (e.clientX-r.left)+'px'); c.style.setProperty('--my', (e.clientY-r.top)+'px'); });
+    c.addEventListener('mouseleave', () => { c.style.transition = 'transform .6s'; c.style.transform = ''; setTimeout(()=>c.style.transition='',600); });
+  });
+}
+
+/* ---------- seção pinada: site nascendo ---------- */
+const build = $('#processo'), bw = $('#bw'), msite = $('#msite'), termEl = $('#term');
+const steps = $$('.step'), mels = $$('.mel');
+const PALETTES = ['#C8FF45','#FF7AB6','#7C6CFF','#38E1C6','#F3C76A','#FF7AB6'];
+const LINES = [
+  [.01,'$ bdr new estetica-aurora','p'],
+  [.05,'✓ projeto criado','ok'],
+  [.09,'$ bdr layout --mobile-first','p'],
+  [.15,'✓ estrutura responsiva pronta','ok'],
+  [.25,'$ bdr design --marca','p'],
+  [.29,'✓ cores e tipografia aplicadas','ok'],
+  [.34,'$ bdr conteudo --from instagram','p'],
+  [.40,'✓ serviços, fotos e textos','ok'],
+  [.47,'✓ prévia enviada ao cliente','ok'],
+  [.52,'$ bdr ajustes --paleta','p'],
+  [.56,'  ↻ testando cores…','cm'],
+  [.70,'✓ aprovado pelo cliente','ok'],
+  [.76,'$ bdr seo --google','p'],
+  [.80,'✓ meta tags · sitemap · perfil Google','ok'],
+  [.85,'$ bdr deploy --dominio estetica-aurora.com.br','p'],
+  [.91,'✓ HTTPS ativo','ok'],
+  [.95,'● site no ar','ok'],
+];
+let lastBP = -1;
+function renderBuild(){
+  const r = build.getBoundingClientRect();
+  const span = build.offsetHeight - innerHeight;
+  const p = Math.min(1, Math.max(0, -r.top / span));
+  if (Math.abs(p - lastBP) < .001) return; lastBP = p;
+  // steps
+  const si = Math.min(3, Math.floor(p * 4));
+  steps.forEach((s,i) => s.classList.toggle('on', i === si));
+  const rail = $('#rail'); const lastStep = steps[si];
+  rail.style.height = (lastStep.offsetTop + 14 - 8) + 'px';
+  $('#bbar').style.width = (p*100)+'%';
+  $('#bpct').textContent = String(Math.round(p*100)).padStart(3,'0') + '%';
+  // elementos aparecendo
+  mels.forEach(m => m.classList.toggle('in', p >= +m.dataset.at));
+  msite.classList.toggle('styled', p >= .27);
+  msite.classList.toggle('filled', p >= .36);
+  // paletas
+  let acc = PALETTES[0];
+  if (p >= .52) { const k = Math.min(1,(p-.52)/.18); acc = PALETTES[Math.min(PALETTES.length-1, Math.floor(k*(PALETTES.length-1)+.0001))]; }
+  bw.style.setProperty('--acc', acc);
+  // deploy
+  const live = p >= .93;
+  bw.classList.toggle('live', live); msite.classList.toggle('live', live);
+  $('#online').classList.toggle('on', live);
+  $('#burl').textContent = p < .85 ? 'localhost:3000' : 'https://estetica-aurora.com.br';
+  // terminal digitando conforme a rolagem
+  let html = '';
+  LINES.forEach(([t,txt,cls], i) => {
+    if (p < t) return;
+    const next = LINES[i+1] ? LINES[i+1][0] : 1;
+    const k = Math.min(1, (p - t) / Math.max(.015, (next - t) * .8));
+    const shown = txt.slice(0, Math.ceil(txt.length * k));
+    html += `<span class="${cls}">${shown.replace(/</g,'&lt;')}</span>\n`;
+  });
+  termEl.innerHTML = html + '<span class="caret"></span>';
+}
+
+/* ---------- HUD / progresso ---------- */
+const SHAPE_NAMES = ['ESFERA','HÉLICE','ONDA','TÚNEL','LOGO'];
+const zones = $$('[data-shape]');
+const hudLinks = $$('#hudSide a');
+let target = {shape:0, x:MOBILE?0:2.3, o:1};
+function onScroll(){
+  const h = document.documentElement.scrollHeight - innerHeight;
+  const pct = scrollY / h;
+  $('#topbar').style.width = (pct*100)+'%';
+  $('#hPct').textContent = String(Math.round(pct*100)).padStart(3,'0') + '%';
+  nav.classList.toggle('scrolled', scrollY > 20);
+  const mid = innerHeight * .5; let cur = zones[0];
+  for (const z of zones) { const r = z.getBoundingClientRect(); if (r.top <= mid && r.bottom >= mid) { cur = z; break; } }
+  target.shape = +cur.dataset.shape; target.x = MOBILE ? 0 : +cur.dataset.x; target.o = (+cur.dataset.o) * (MOBILE ? .45 : 1);
+  $('#hShape').textContent = SHAPE_NAMES[target.shape];
+  const id = (cur.id === 'faq' || cur.id === 'avaliar') ? 'sobre' : (cur.tagName === 'FOOTER' ? 'contato' : cur.id);
+  hudLinks.forEach(a => a.classList.toggle('on', a.dataset.for === id));
+  renderBuild();
+}
+addEventListener('scroll', onScroll, {passive:true});
+addEventListener('resize', () => { lastBP = -1; onScroll(); });
+onScroll();
+
+/* ---------- WebGL puro: partículas que mudam de forma ---------- */
+function initGL(){
+  if (REDUCED) throw 0;
+  const canvas = $('#gl');
+  const gl = canvas.getContext('webgl', {antialias:false, alpha:true, premultipliedAlpha:false, powerPreference:'high-performance'});
+  if (!gl) throw 0;
+  const DPR = Math.min(devicePixelRatio, 1.75);
+  const resize = () => { canvas.width = innerWidth*DPR; canvas.height = innerHeight*DPR; gl.viewport(0,0,canvas.width,canvas.height); };
+  resize(); addEventListener('resize', resize);
+
+  const N = MOBILE ? 5000 : 12000;
+  $('#cPart').textContent = N.toLocaleString('pt-BR');
+  const R = Math.random, mk = () => new Float32Array(N*3);
+  const S = [mk(),mk(),mk(),mk(),mk()], rnd = new Float32Array(N);
+  // 0 esfera (fibonacci)
+  for (let i=0;i<N;i++){ const y=1-2*(i+.5)/N, rr=Math.sqrt(1-y*y), th=Math.PI*(1+Math.sqrt(5))*i, rad=2.3+(R()-.5)*.12;
+    S[0].set([Math.cos(th)*rr*rad, y*rad, Math.sin(th)*rr*rad], i*3); rnd[i]=R(); }
+  // 1 hélice dupla (DNA)
+  for (let i=0;i<N;i++){ const t=R(), ang=t*Math.PI*7, x=(t-.5)*10;
+    if (R()<.78){ const s=i%2?Math.PI:0, j=(R()-.5)*.12; S[1].set([x, Math.cos(ang+s)*1.15+j, Math.sin(ang+s)*1.15+j], i*3); }
+    else { const tt=Math.round(t*60)/60, a=tt*Math.PI*7, k=R()*2-1; S[1].set([(tt-.5)*10, Math.cos(a)*1.15*k, Math.sin(a)*1.15*k], i*3); } }
+  // 2 malha de onda inclinada
+  const side=Math.ceil(Math.sqrt(N)), ca=Math.cos(1.0), sa=Math.sin(1.0);
+  for (let i=0;i<N;i++){ const x=((i%side)/side-.5)*16, z=((i/side|0)/side-.5)*10; S[2].set([x, -z*sa-.6, z*ca-1], i*3); }
+  // 3 túnel
+  for (let i=0;i<N;i++){ const a=R()*Math.PI*2, z=(R()*2-1)*9, rr=3.2+(R()-.5)*.3; S[3].set([Math.cos(a)*rr, Math.sin(a)*rr, z], i*3); }
+  // 4 logo BDR, amostrado de um canvas 2D
+  const c2=document.createElement('canvas'), W=600, H=220; c2.width=W; c2.height=H;
+  const cx=c2.getContext('2d'); cx.fillStyle='#fff'; cx.textAlign='center'; cx.textBaseline='middle';
+  cx.font='800 190px "Bricolage Grotesque", sans-serif'; cx.fillText('BDR', W/2, H/2+8);
+  const data=cx.getImageData(0,0,W,H).data, pts=[];
+  for (let y=0;y<H;y+=2) for (let x=0;x<W;x+=2) if (data[(y*W+x)*4+3]>128) pts.push([x,y]);
+  for (let i=0;i<N;i++){ const [x,y]=pts.length?pts[R()*pts.length|0]:[W/2,H/2];
+    S[4].set([(x/W-.5)*8.4, -(y/H-.5)*3.1+1.6, (R()-.5)*.35], i*3); }
+
+  const VS = `
+    precision highp float;
+    attribute vec3 aS0,aS1,aS2,aS3,aS4; attribute float aRnd;
+    uniform float uM,uT,uPx,uAsp,uGX,uGRy,uGRx,uCamY; uniform vec2 uMouse;
+    varying vec3 vCol; varying float vA;
+    mat3 rY(float a){float c=cos(a),s=sin(a);return mat3(c,0.,-s,0.,1.,0.,s,0.,c);}
+    mat3 rX(float a){float c=cos(a),s=sin(a);return mat3(1.,0.,0.,0.,c,s,0.,-s,c);}
+    vec3 shape(float k){
+      if(k<.5) return rY(uT*.12)*aS0;
+      if(k<1.5) return rX(uT*.45)*aS1;
+      if(k<2.5){ vec3 p=aS2; p+=vec3(0.,.54,.84)*sin(p.x*.8+uT*1.2)*cos(p.y*1.3+uT*.8)*.55; return p; }
+      if(k<3.5){ vec3 p=aS3; p.z=mod(p.z+uT*2.5+9.,18.)-9.; return rY(.0)*p; }
+      return aS4;
+    }
+    void main(){
+      float a=floor(uM), f=uM-a;
+      float d=clamp((f-aRnd*.35)/.65,0.,1.); d=d*d*(3.-2.*d);
+      vec3 p=mix(shape(a),shape(min(a+1.,4.)),d);
+      p+=normalize(p+.001)*sin(d*3.14159)*(.6+aRnd*1.4)*.6;
+      p+=.05*vec3(sin(uT*.9+aRnd*40.),cos(uT*.7+aRnd*30.),sin(uT*.5+aRnd*20.));
+      p=rY(uGRy)*rX(uGRx)*p; p.x+=uGX;
+      vec3 mv=vec3(p.x, p.y-uCamY, p.z-7.5);
+      vec2 sp=mv.xy/-mv.z; vec2 dm=sp-uMouse*vec2(uAsp,1.)/1.921;
+      float infl=smoothstep(.35,0.,length(dm));
+      mv.xy+=normalize(dm+.0001)*infl*.9;
+      float fl=1.921;
+      gl_Position=vec4(mv.x*fl/uAsp, mv.y*fl, (mv.z*100.1+20.)/(-99.9), -mv.z);
+      gl_PointSize=min(40., (2.0+aRnd*2.8)*uPx*(9./max(.1,-mv.z)));
+      vCol=mix(vec3(.78,1.,.27),vec3(.49,.42,1.),smoothstep(.15,.95,aRnd+p.y*.08));
+      vCol=mix(vCol,vec3(1.),infl*.6);
+      vA=.55+.45*sin(uT*2.+aRnd*60.);
+    }`;
+  const FS = `
+    precision mediump float;
+    uniform float uO; varying vec3 vCol; varying float vA;
+    void main(){ float d=length(gl_PointCoord-.5); if(d>.5) discard;
+      gl_FragColor=vec4(vCol, smoothstep(.5,0.,d)*vA*uO*.9); }`;
+  const sh = (type, src) => { const s=gl.createShader(type); gl.shaderSource(s,src); gl.compileShader(s);
+    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s)); return s; };
+  const prog = gl.createProgram();
+  gl.attachShader(prog, sh(gl.VERTEX_SHADER, VS)); gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, FS));
+  gl.linkProgram(prog); if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(prog));
+  gl.useProgram(prog);
+  const attr = (name, arr, size) => { const loc=gl.getAttribLocation(prog,name); if (loc<0) return;
+    const b=gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER,b); gl.bufferData(gl.ARRAY_BUFFER,arr,gl.STATIC_DRAW);
+    gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc,size,gl.FLOAT,false,0,0); };
+  S.forEach((a,k) => attr('aS'+k, a, 3)); attr('aRnd', rnd, 1);
+  const U = {}; ['uM','uT','uPx','uAsp','uGX','uGRy','uGRx','uCamY','uMouse','uO'].forEach(n => U[n]=gl.getUniformLocation(prog,n));
+  gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE); gl.disable(gl.DEPTH_TEST);
+  gl.clearColor(0,0,0,0);
+
+  let morph=0, gx=target.x, op=1, t0=performance.now(), frames=0, fpsT=t0, last=t0;
+  const sm={x:0,y:0};
+  (function loop(now){
+    const dt=Math.min(.05,(now-last)/1000); last=now;
+    morph += (target.shape-morph)*(1-Math.pow(.02,dt)); if (Math.abs(target.shape-morph)<.002) morph=target.shape;
+    gx += (target.x-gx)*(1-Math.pow(.05,dt));
+    op += (target.o-op)*(1-Math.pow(.05,dt));
+    sm.x += (nmx-sm.x)*.06; sm.y += (nmy-sm.y)*.06;
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.uniform1f(U.uM,morph); gl.uniform1f(U.uT,(now-t0)/1000); gl.uniform1f(U.uPx,DPR);
+    gl.uniform1f(U.uAsp,innerWidth/innerHeight); gl.uniform1f(U.uGX,gx);
+    gl.uniform1f(U.uGRy,sm.x*.25); gl.uniform1f(U.uGRx,sm.y*.15); gl.uniform1f(U.uCamY,0.);
+    gl.uniform2f(U.uMouse, FINE?sm.x:9, FINE?-sm.y:9); gl.uniform1f(U.uO,op);
+    gl.drawArrays(gl.POINTS,0,N);
+    frames++; if (now-fpsT>500){ const f=Math.round(frames*1000/(now-fpsT)); $('#hFps').textContent=f; $('#cFps').textContent=f; frames=0; fpsT=now; }
+    requestAnimationFrame(loop);
+  })(t0);
+}
+(document.fonts ? document.fonts.ready : Promise.resolve()).then(() => {
+  try { initGL(); } catch(e) { console.error('webgl', e); document.body.classList.add('no-gl'); $('#gl').style.display='none'; }
+});
+
+/* ---------- avaliação no Google ---------- */
+(function(){
+  const url = GOOGLE_REVIEW_URL || 'https://www.google.com/search?q=BDR+DIGITAL+Empresa+de+Software';
+  document.querySelectorAll('.g-review').forEach(a => a.href = url);
+  const stars = document.getElementById('revStars');
+  new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { stars.classList.add('lit'); o.disconnect(); } }, {threshold:.6}).observe(stars);
+})();
+
+/* ---------- WhatsApp + formulário ---------- */
+const wa = $('#wa');
+if (WHATSAPP) { wa.href = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent('Olá! Vi o site da BDR Digital e quero uma prévia do meu site.')}`; wa.style.display = 'grid'; }
+$('#form').addEventListener('submit', e => {
+  e.preventDefault();
+  const f = new FormData(e.target);
+  const texto = `Olá! Meu nome é ${f.get('nome')}.\nEmpresa: ${f.get('empresa')}\nPreciso de: ${f.get('tipo')}\n\n${f.get('msg') || ''}`;
+  if (WHATSAPP) location.href = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(texto)}`;
+  else location.href = `mailto:${EMAIL}?subject=${encodeURIComponent('Quero uma prévia do meu site - ' + f.get('empresa'))}&body=${encodeURIComponent(texto)}`;
+});
+</script>
+</body>
+</html>
