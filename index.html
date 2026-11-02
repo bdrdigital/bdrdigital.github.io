@@ -372,24 +372,28 @@
     .rv{opacity:1;transform:none}
   }
 
-  /* ===== E-BOOK (produto) ===== */
-  .ebook-box{display:grid;grid-template-columns:.85fr 1.15fr;gap:56px;align-items:center;padding:56px;position:relative;overflow:hidden}
-  .ebook-box::before{content:"";position:absolute;width:460px;height:460px;border-radius:50%;background:var(--lime);filter:blur(150px);opacity:.10;left:-140px;bottom:-200px;pointer-events:none}
-  .eb-stage{perspective:1400px;display:grid;place-items:center}
-  .eb-book{position:relative;width:min(340px,70vw);aspect-ratio:1/1;transform:rotateY(-22deg) rotateX(6deg);transform-style:preserve-3d;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
-  .ebook-box:hover .eb-book{transform:rotateY(-8deg) rotateX(2deg) translateY(-6px)}
+  /* ===== E-BOOKS (produtos) ===== */
+  .eb-head{margin-bottom:40px}
+  .eb-head h2{font-size:clamp(32px,3.8vw,50px);margin-bottom:14px}
+  .eb-head p.lead2,.eb-card p.lead2{color:var(--muted);max-width:560px}
+  .eb-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+  .eb-card{padding:40px 36px 36px;position:relative;overflow:hidden;display:flex;flex-direction:column}
+  .eb-card::before{content:"";position:absolute;width:380px;height:380px;border-radius:50%;background:var(--lime);filter:blur(140px);opacity:.08;right:-140px;top:-160px;pointer-events:none}
+  .eb-stage{perspective:1400px;display:grid;place-items:center;margin-bottom:34px}
+  .eb-book{position:relative;width:min(240px,60vw);aspect-ratio:1/1;transform:rotateY(-22deg) rotateX(6deg);transform-style:preserve-3d;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+  .eb-card:hover .eb-book{transform:rotateY(-8deg) rotateX(2deg) translateY(-6px)}
   .eb-book img{width:100%;height:100%;object-fit:cover;border-radius:6px 14px 14px 6px;box-shadow:0 40px 80px -24px rgba(0,0,0,.85),0 0 0 1px rgba(255,255,255,.06);display:block;position:relative;z-index:2}
-  .eb-book::before{content:"";position:absolute;top:2%;bottom:2%;right:-15px;width:17px;background:repeating-linear-gradient(90deg,#e9ecf2 0 2px,#c9ced8 2px 3px);transform:rotateY(80deg);transform-origin:left;border-radius:0 3px 3px 0}
+  .eb-book::before{content:"";position:absolute;top:2%;bottom:2%;right:-13px;width:15px;background:repeating-linear-gradient(90deg,#e9ecf2 0 2px,#c9ced8 2px 3px);transform:rotateY(80deg);transform-origin:left;border-radius:0 3px 3px 0}
   .eb-badge{position:absolute;top:-14px;right:-14px;z-index:3;font-family:var(--mono);font-size:12px;background:var(--lime);color:#07080B;font-weight:500;padding:7px 12px;border-radius:999px;transform:rotate(6deg)}
-  .ebook-box h2{font-size:clamp(32px,3.8vw,50px);margin-bottom:18px}
-  .ebook-box p.lead2{color:var(--muted);max-width:520px}
-  .eb-list{list-style:none;display:grid;gap:10px;margin:26px 0 32px}
-  .eb-list li{display:flex;gap:12px;color:var(--muted);font-size:16px}
+  .eb-body{display:flex;flex-direction:column;flex:1}
+  .eb-card h3{font-family:var(--head);font-weight:800;letter-spacing:-.04em;line-height:1.05;font-size:clamp(26px,2.6vw,34px);margin-bottom:12px}
+  .eb-list{list-style:none;display:grid;gap:10px;margin:22px 0 28px}
+  .eb-list li{display:flex;gap:12px;color:var(--muted);font-size:15.5px}
   .eb-list li svg{flex:none;width:19px;height:19px;color:var(--lime);margin-top:3px}
   .eb-list li strong{color:var(--text);font-weight:600}
-  .eb-cta{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+  .eb-cta{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-top:auto}
   .eb-cta small{font-family:var(--mono);font-size:12px;color:var(--dim)}
-  @media (max-width:980px){.ebook-box{grid-template-columns:1fr;padding:34px 24px;gap:40px}.eb-book{width:min(260px,64vw)}}
+  @media (max-width:980px){.eb-grid{grid-template-columns:1fr}.eb-card{padding:32px 24px}.eb-book{width:min(220px,58vw)}}
 </style>
 </head>
 <body>
@@ -405,7 +409,7 @@
   <a href="#servicos" data-for="servicos"><span>02 · SERVIÇOS</span><i></i></a>
   <a href="#processo" data-for="processo"><span>03 · PROCESSO</span><i></i></a>
   <a href="#portfolio" data-for="portfolio"><span>04 · PORTFÓLIO</span><i></i></a>
-  <a href="#ebook" data-for="ebook"><span>05 · E-BOOK</span><i></i></a>
+  <a href="#ebook" data-for="ebook"><span>05 · E-BOOKS</span><i></i></a>
   <a href="#sobre" data-for="sobre"><span>06 · SOBRE</span><i></i></a>
   <a href="#contato" data-for="contato"><span>07 · CONTATO</span><i></i></a>
 </div>
@@ -418,7 +422,7 @@
       <a href="#servicos">Serviços</a>
       <a href="#processo">Como funciona</a>
       <a href="#portfolio">Portfólio</a>
-      <a href="#ebook">E-book</a>
+      <a href="#ebook">E-books</a>
       <a href="#sobre">Sobre</a>
       <a href="#faq">Dúvidas</a>
     </div>
@@ -612,31 +616,61 @@
   </div>
 </section>
 
-<!-- ===== E-BOOK ===== -->
+<!-- ===== E-BOOKS ===== -->
 <section class="sec" id="ebook" data-shape="3" data-x="0" data-o=".3" style="padding-top:40px">
   <div class="wrap">
-    <div class="ebook-box glass rv">
-      <a href="ebook/" class="eb-stage" aria-label="Ver a página do e-book">
-        <div class="eb-book">
-          <img src="ebook/capa.png" alt="Capa do e-book Automatize suas Planilhas com Python e IA" width="1080" height="1080" loading="lazy">
-          <span class="eb-badge">NOVO</span>
+    <div class="eb-head rv">
+      <span class="eyebrow scr">// e-books da BDR Digital</span>
+      <h2>Conhecimento que a gente usa <span style="color:var(--lime)">todo dia.</span></h2>
+      <p class="lead2">Guias práticos, sem enrolação, com tudo pronto pra aplicar no mesmo dia.</p>
+    </div>
+    <div class="eb-grid">
+      <article class="eb-card glass rv">
+        <a href="ebook/" class="eb-stage" aria-label="Ver a página do e-book Automatize suas Planilhas com Python e IA">
+          <div class="eb-book">
+            <img src="ebook/capa.png" alt="Capa do e-book Automatize suas Planilhas com Python e IA" width="1080" height="1080" loading="lazy">
+            <span class="eb-badge">AUTOMAÇÃO</span>
+          </div>
+        </a>
+        <div class="eb-body">
+          <span class="eyebrow scr">// produtividade</span>
+          <h3>Automatize suas planilhas com <span style="color:var(--lime)">Python e IA.</span></h3>
+          <p class="lead2">Os mesmos robôs que a BDR usa em automação, explicados para quem nunca programou.</p>
+          <ul class="eb-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12l5 5L20 7"/></svg><span><strong>8 capítulos práticos</strong>, do zero ao robô rodando sozinho</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12l5 5L20 7"/></svg><span><strong>3 robôs prontos:</strong> juntar planilhas, relatório e cobrança</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12l5 5L20 7"/></svg><span><strong>Prompts prontos</strong> pra IA adaptar à sua rotina</span></li>
+          </ul>
+          <div class="eb-cta">
+            <a href="ebook/" class="btn btn-lime mag">Conhecer o e-book
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            <small>R$ 27 · acesso imediato</small>
+          </div>
         </div>
-      </a>
-      <div>
-        <span class="eyebrow scr">// e-book da BDR Digital</span>
-        <h2>Automatize suas planilhas com <span style="color:var(--lime)">Python e IA.</span></h2>
-        <p class="lead2">Os mesmos robôs que a BDR usa em automação, explicados passo a passo para quem nunca programou. Você usa a IA para escrever o código e coloca seu primeiro robô para rodar.</p>
-        <ul class="eb-list">
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12l5 5L20 7"/></svg><span><strong>8 capítulos práticos</strong>, do zero até o robô rodando sozinho</span></li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12l5 5L20 7"/></svg><span><strong>3 robôs prontos:</strong> juntar planilhas, relatório automático e avisos de cobrança</span></li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12l5 5L20 7"/></svg><span><strong>Prompts prontos</strong> pra IA adaptar cada robô à sua rotina</span></li>
-        </ul>
-        <div class="eb-cta">
-          <a href="ebook/" class="btn btn-lime mag">Conhecer o e-book
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-          <small>acesso imediato · 7 dias de garantia</small>
+      </article>
+      <article class="eb-card glass rv d1">
+        <a href="empresa-blindada/" class="eb-stage" aria-label="Ver a página do e-book Empresa Blindada">
+          <div class="eb-book">
+            <img src="empresa-blindada/capa.png" alt="Capa do e-book Empresa Blindada" width="1080" height="1080" loading="lazy">
+            <span class="eb-badge">NOVO</span>
+          </div>
+        </a>
+        <div class="eb-body">
+          <span class="eyebrow scr">// segurança digital</span>
+          <h3>Empresa <span style="color:var(--lime)">blindada</span> contra golpes.</h3>
+          <p class="lead2">Proteja o WhatsApp, o Instagram, o e-mail e o caixa da sua pequena empresa, sem termos técnicos.</p>
+          <ul class="eb-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12l5 5L20 7"/></svg><span><strong>12 capítulos</strong> com o caminho exato em cada aplicativo</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12l5 5L20 7"/></svg><span><strong>6 golpes explicados</strong> e o plano de emergência</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12l5 5L20 7"/></svg><span><strong>Bônus:</strong> programa interativo com nota e certificado</span></li>
+          </ul>
+          <div class="eb-cta">
+            <a href="empresa-blindada/" class="btn btn-lime mag">Conhecer o e-book
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            <small>R$ 27 · acesso imediato</small>
+          </div>
         </div>
-      </div>
+      </article>
     </div>
   </div>
 </section>
