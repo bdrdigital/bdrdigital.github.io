@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Empresa Blindada — Proteja sua empresa contra golpes digitais | BDR Digital</title>
+<meta name="description" content="Proteja o WhatsApp, o Instagram e o caixa da sua pequena empresa contra golpes. E-book prático com 12 capítulos + programa interativo de bônus.">
+<meta property="og:title" content="Empresa Blindada">
+<meta property="og:description" content="Proteja o WhatsApp, o Instagram e o caixa da sua empresa contra golpes. Sem termos técnicos.">
+<meta property="og:image" content="https://bdrdigital.github.io/empresa-blindada/capa.png">
+<meta property="og:type" content="product">
+<meta name="theme-color" content="#07080B">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#07080B; --bg2:#0D0F15; --card:rgba(20,22,31,.78); --line:#232633;
+    --text:#ECEEF3; --muted:#9097A8; --dim:#5D6375;
+    --lime:#C8FF45; --violet:#7C6CFF; --green:#21C46B;
+    --radius:20px;
+    --head:'Bricolage Grotesque',system-ui,sans-serif;
+    --body:'Instrument Sans',system-ui,sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:17px;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block}
+  .wrap{width:min(1120px,92vw);margin:0 auto}
+  ::selection{background:var(--lime);color:#000}
+
+  /* fundo */
+  .bg-grid{position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
+    background-size:56px 56px;mask-image:radial-gradient(ellipse at 50% 20%,#000 30%,transparent 75%)}
+  .glow{position:fixed;width:620px;height:620px;border-radius:50%;filter:blur(120px);opacity:.22;pointer-events:none;z-index:0}
+  .glow.g1{background:var(--violet);top:-200px;right:-160px}
+  .glow.g2{background:var(--lime);bottom:-320px;left:-260px;opacity:.10}
+  main,nav,footer{position:relative;z-index:2}
+
+  /* nav */
+  nav{position:sticky;top:0;z-index:50;background:rgba(7,8,11,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:68px;gap:16px}
+  .logo{display:flex;align-items:center;gap:10px;font-family:var(--head);font-weight:800;font-size:19px;letter-spacing:-.03em}
+  .logo span{color:var(--muted);font-weight:600}
+  .logo-mark{width:32px;height:32px;border-radius:9px;background:var(--lime);color:#07080B;display:grid;place-items:center;font-size:12px;font-weight:800;letter-spacing:-.04em}
+  .back{font-family:var(--mono);font-size:13px;color:var(--muted)}
+  .back:hover{color:var(--text)}
+
+  /* botões */
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:16px 26px;border-radius:999px;font-weight:600;font-size:16px;transition:box-shadow .2s,transform .2s;cursor:pointer;border:0;font-family:var(--body)}
+  .btn svg{width:18px;height:18px}
+  .btn-lime{background:var(--lime);color:#07080B}
+  .btn-lime:hover{box-shadow:0 12px 38px -6px rgba(200,255,69,.6);transform:translateY(-2px)}
+  .btn-ghost{border:1px solid var(--line);color:var(--text);background:rgba(7,8,11,.4)}
+  .btn-ghost:hover{border-color:var(--muted)}
+  .btn-sm{padding:10px 18px;font-size:14px}
+
+  .tag{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:13px;color:var(--lime);border:1px solid rgba(200,255,69,.25);background:rgba(200,255,69,.06);padding:7px 14px;border-radius:999px}
+  .tag .dot{width:7px;height:7px;border-radius:50%;background:var(--lime);box-shadow:0 0 10px var(--lime)}
+  .eyebrow{font-family:var(--mono);font-size:13px;color:var(--lime);letter-spacing:.04em;margin-bottom:16px;display:block}
+  h1,h2,h3{font-family:var(--head);letter-spacing:-.04em;line-height:1.02}
+  h2{font-weight:800;font-size:clamp(32px,4.2vw,54px);max-width:760px}
+  h2 em{font-style:normal;color:var(--muted)}
+  .glass{background:var(--card);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:var(--radius)}
+  .sec{padding:110px 0}
+  .sec-head{margin-bottom:52px}
+  .sec-head p{color:var(--muted);max-width:560px;margin-top:18px}
+
+  /* hero */
+  .hero{padding:80px 0 60px}
+  .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center}
+  .hero h1{font-weight:800;font-size:clamp(42px,5.6vw,76px);margin:22px 0 22px}
+  .hero h1 .hl{color:var(--lime)}
+  .lead{font-size:clamp(17px,1.6vw,20px);color:var(--muted);max-width:560px}
+  .lead strong{color:var(--text);font-weight:600}
+  .buy{margin-top:34px;display:flex;flex-wrap:wrap;align-items:center;gap:16px 22px}
+  .price{display:none;flex-direction:column;line-height:1.15}
+  .price.on{display:flex}
+  .price small{font-family:var(--mono);font-size:12px;color:var(--dim);letter-spacing:.05em}
+  .price b{font-family:var(--head);font-size:34px;letter-spacing:-.03em}
+  .checks{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:26px;font-size:14px;color:var(--muted)}
+  .checks span{display:inline-flex;align-items:center;gap:8px}
+  .checks svg{width:16px;height:16px;color:var(--lime)}
+
+  /* livro 3D */
+  .book-stage{perspective:1600px;display:grid;place-items:center;padding:20px}
+  .book{position:relative;width:min(380px,78vw);aspect-ratio:1/1;transform-style:preserve-3d;transform:rotateY(-24deg) rotateX(6deg);transition:transform .25s ease-out}
+  .book img{width:100%;height:100%;object-fit:cover;border-radius:6px 14px 14px 6px;box-shadow:0 40px 80px -20px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.06);position:relative;z-index:2}
+  .book::before{content:"";position:absolute;top:2%;bottom:2%;right:-16px;width:18px;background:repeating-linear-gradient(90deg,#e9ecf2 0 2px,#c9ced8 2px 3px);transform:rotateY(80deg);transform-origin:left;border-radius:0 3px 3px 0}
+  .book::after{content:"";position:absolute;inset:auto 6% -40px 6%;height:40px;background:radial-gradient(ellipse at center,rgba(200,255,69,.28),transparent 70%);filter:blur(8px)}
+  .float-chip{position:absolute;font-family:var(--mono);font-size:12px;padding:8px 12px;border-radius:10px;background:rgba(13,15,21,.9);border:1px solid var(--line);color:var(--muted);z-index:3;white-space:nowrap}
+  .float-chip b{color:var(--lime);font-weight:500}
+  .fc1{top:-30px;left:-4%}.fc2{top:42%;right:-22%}.fc3{bottom:-44px;left:12%}
+
+  /* faixa */
+  .strip{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:rgba(13,15,21,.6)}
+  .strip-in{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+  .stat{padding:28px 22px;border-right:1px solid var(--line)}
+  .stat:last-child{border-right:0}
+  .stat b{display:block;font-family:var(--head);font-size:34px;letter-spacing:-.03em;color:var(--lime);line-height:1}
+  .stat span{font-size:14px;color:var(--muted)}
+
+  /* dor */
+  .pain{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .pcard{padding:30px}
+  .pcard .n{font-family:var(--mono);font-size:12px;color:var(--dim);margin-bottom:16px}
+  .pcard p{color:var(--muted);font-size:16px}
+  .pcard p strong{color:var(--text)}
+
+  /* terminal demo */
+  .demo{display:grid;grid-template-columns:.9fr 1.1fr;gap:48px;align-items:center}
+  .term{border-radius:16px;overflow:hidden;border:1px solid var(--line);background:#0A0C11;box-shadow:0 30px 70px -30px rgba(0,0,0,.8)}
+  .term-bar{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:12px;color:var(--dim)}
+  .term-bar i{width:10px;height:10px;border-radius:50%;background:#2a2e3b;display:block}
+  .term-bar span{margin-left:8px}
+  .term pre{font-family:var(--mono);font-size:14px;line-height:1.75;padding:20px 22px;min-height:290px;color:#c9d0de;white-space:pre-wrap}
+  .term .p{color:var(--lime)} .term .ok{color:var(--green)} .term .dim{color:var(--dim)}
+  .caret{display:inline-block;width:8px;height:16px;background:var(--lime);vertical-align:-3px;animation:blink 1s steps(1) infinite}
+  @keyframes blink{50%{opacity:0}}
+  .demo ul{list-style:none;display:grid;gap:14px;margin-top:26px}
+  .demo li{display:flex;gap:12px;color:var(--muted)}
+  .demo li svg{flex:none;width:20px;height:20px;color:var(--lime);margin-top:3px}
+  .demo li strong{color:var(--text)}
+
+  /* capítulos */
+  .chapters{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .ch{padding:24px 26px;display:flex;gap:18px;align-items:flex-start;transition:border-color .25s,transform .25s}
+  .ch:hover{border-color:rgba(200,255,69,.35);transform:translateY(-3px)}
+  .ch .num{font-family:var(--mono);font-size:13px;color:var(--lime);border:1px solid rgba(200,255,69,.25);border-radius:8px;padding:4px 8px;flex:none}
+  .ch h3{font-size:20px;letter-spacing:-.02em;font-weight:600;margin-bottom:6px;line-height:1.2}
+  .ch p{font-size:15px;color:var(--muted)}
+
+  /* entrega */
+  .deliver{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  .dv{padding:28px}
+  .dv-ic{width:46px;height:46px;border-radius:12px;background:rgba(200,255,69,.1);color:var(--lime);display:grid;place-items:center;margin-bottom:20px}
+  .dv-ic svg{width:22px;height:22px}
+  .dv h3{font-size:19px;font-weight:600;letter-spacing:-.02em;margin-bottom:8px;line-height:1.2}
+  .dv p{font-size:15px;color:var(--muted)}
+
+  /* pra quem */
+  .who{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .who-card{padding:34px}
+  .who-card h3{font-size:22px;font-weight:600;letter-spacing:-.02em;margin-bottom:18px;display:flex;align-items:center;gap:10px}
+  .who-card ul{list-style:none;display:grid;gap:12px}
+  .who-card li{display:flex;gap:10px;color:var(--muted);font-size:16px}
+  .who-card li svg{flex:none;width:18px;height:18px;margin-top:4px}
+  .yes svg{color:var(--lime)} .no svg{color:#ff6b6b}
+
+  /* garantia + cta */
+  .offer{padding:56px;display:grid;grid-template-columns:1.2fr .8fr;gap:40px;align-items:center;position:relative;overflow:hidden}
+  .offer::before{content:"";position:absolute;width:420px;height:420px;border-radius:50%;background:var(--lime);filter:blur(140px);opacity:.12;right:-120px;top:-160px}
+  .offer h2{font-size:clamp(30px,3.6vw,46px)}
+  .offer p{color:var(--muted);margin-top:16px;max-width:520px}
+  .offer-box{position:relative;text-align:center;padding:30px;border-radius:16px;border:1px solid var(--line);background:rgba(7,8,11,.6)}
+  .offer-box .price{align-items:center;margin-bottom:18px}
+  .offer-box .btn{width:100%}
+  .offer-box small{display:block;margin-top:14px;font-size:13px;color:var(--dim)}
+  .guar{display:flex;gap:14px;align-items:center;margin-top:26px;color:var(--muted);font-size:15px}
+  .guar svg{flex:none;width:38px;height:38px;color:var(--lime)}
+
+  /* faq */
+  .faq{display:grid;gap:12px;max-width:820px}
+  details{padding:0 26px;border-radius:16px}
+  summary{list-style:none;cursor:pointer;padding:22px 0;font-weight:600;font-size:18px;display:flex;justify-content:space-between;gap:16px;align-items:center}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"+";font-family:var(--mono);color:var(--lime);font-size:22px;transition:transform .25s}
+  details[open] summary::after{transform:rotate(45deg)}
+  details p{color:var(--muted);padding:0 0 22px;font-size:16px}
+
+  footer{border-top:1px solid var(--line);padding:46px 0;margin-top:40px}
+  .foot{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap;align-items:center}
+  .foot-links{display:flex;gap:22px;flex-wrap:wrap;font-size:15px;color:var(--muted)}
+  .foot-links a:hover{color:var(--lime)}
+  .copy{margin-top:26px;font-size:13px;color:var(--dim)}
+
+  /* barra fixa no celular */
+  .mbar{display:none}
+
+  .rv{opacity:0;transform:translateY(28px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+  .rv.in{opacity:1;transform:none}
+  .d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}
+
+  @media (max-width:980px){
+    .hero{padding:44px 0 40px}
+    .hero-grid,.demo,.offer{grid-template-columns:1fr}
+    .book-stage{order:-1}
+    .book{width:min(300px,70vw)}
+    .float-chip{display:none}
+    .strip-in{grid-template-columns:repeat(2,1fr)}
+    .stat:nth-child(2){border-right:0}
+    .stat:nth-child(-n+2){border-bottom:1px solid var(--line)}
+    .pain,.deliver{grid-template-columns:1fr 1fr}
+    .chapters,.who{grid-template-columns:1fr}
+    .offer{padding:34px 24px}
+    .sec{padding:80px 0}
+    .mbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:60;padding:12px 4vw;gap:12px;align-items:center;justify-content:space-between;background:rgba(7,8,11,.92);backdrop-filter:blur(12px);border-top:1px solid var(--line);transform:translateY(110%);transition:transform .3s}
+    .mbar.show{transform:none}
+    .mbar span{font-size:14px;color:var(--muted);line-height:1.2}
+    .mbar span b{display:block;color:var(--text);font-size:15px}
+    footer{padding-bottom:110px}
+  }
+  @media (max-width:560px){
+    .pain,.deliver{grid-template-columns:1fr}
+    .back{display:none}
+    .term pre{font-size:12.5px;min-height:250px}
+    .btn{width:100%}
+    .buy{flex-direction:column;align-items:stretch}
+    .mbar .btn,nav .btn{width:auto}
+  }
+  @media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}.book{transition:none}}
+
+  /* painel demo */
+  .panel{border-radius:16px;border:1px solid var(--line);background:#0A0C11;box-shadow:0 30px 70px -30px rgba(0,0,0,.8);padding:28px;display:grid;grid-template-columns:170px 1fr;gap:26px;align-items:center}
+  .ring{position:relative;width:170px;height:170px}.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+  .ring .v{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .ring .v b{font-family:var(--head);font-size:52px;line-height:1;letter-spacing:-.03em}.ring .v small{font-family:var(--mono);font-size:11px;letter-spacing:.12em;margin-top:6px;font-weight:500}
+  .plist{list-style:none;display:grid;gap:10px}
+  .plist li{display:flex;gap:12px;align-items:center;font-size:15px;color:var(--muted);transition:color .3s}
+  .plist .bx{flex:none;width:22px;height:22px;border-radius:7px;border:2px solid #343a4a;display:grid;place-items:center;transition:.3s}
+  .plist .bx svg{width:14px;height:14px;color:#07080B;opacity:0;transition:.3s}
+  .plist li.ok{color:var(--text)}.plist li.ok .bx{background:var(--lime);border-color:var(--lime)}.plist li.ok .bx svg{opacity:1}
+  .scams{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  @media (max-width:980px){.scams{grid-template-columns:1fr 1fr}}
+  @media (max-width:560px){.scams{grid-template-columns:1fr}.panel{grid-template-columns:1fr;justify-items:center}}
+
+</style>
+</head>
+<body>
+<div class="bg-grid" aria-hidden="true"></div>
+<div class="glow g1" aria-hidden="true"></div>
+<div class="glow g2" aria-hidden="true"></div>
+
+<nav>
+  <div class="wrap nav-in">
+    <a href="../" class="logo"><div class="logo-mark">BDR</div>BDR<span>Digital</span></a>
+    <a href="../" class="back">← voltar ao site</a>
+    <a href="#oferta" class="btn btn-lime btn-sm">Quero o e-book</a>
+  </div>
+</nav>
+
+<main>
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="tag rv"><span class="dot"></span>E-book + programa interativo</span>
+      <h1 class="rv d1">Sua empresa <span class="hl">blindada</span> contra golpes.</h1>
+      <p class="lead rv d2">Um guia sem termos técnicos para proteger <strong>o WhatsApp, o Instagram, o e-mail e o caixa</strong> da sua pequena empresa. Tudo com recursos gratuitos que já estão nos aplicativos que você usa.</p>
+      <div class="buy rv d3">
+        <a href="#oferta" class="btn btn-lime">Quero proteger minha empresa
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <div class="price js-price"><small>INVESTIMENTO</small><b class="js-preco"></b></div>
+      </div>
+      <div class="checks rv d3">
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L20 7"/></svg>Acesso imediato</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L20 7"/></svg>7 dias de garantia</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L20 7"/></svg>Compra segura pela Kiwify</span>
+      </div>
+    </div>
+    <div class="book-stage rv d2">
+      <div class="book" id="book">
+        <img src="capa.png" alt="Capa do e-book Empresa Blindada" width="1080" height="1080">
+        <div class="float-chip fc1">capítulos <b>12</b></div>
+        <div class="float-chip fc2">bônus <b>programa interativo</b></div>
+        <div class="float-chip fc3">termos técnicos <b>zero</b></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="strip">
+  <div class="wrap strip-in">
+    <div class="stat"><b>12</b><span>capítulos práticos</span></div>
+    <div class="stat"><b>6</b><span>golpes explicados</span></div>
+    <div class="stat"><b>30</b><span>dias de plano guiado</span></div>
+    <div class="stat"><b>R$ 0</b><span>em ferramentas pagas</span></div>
+  </div>
+</div>
+
+<section class="sec">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow rv">// conhece algum desses?</span>
+      <h2 class="rv d1">O golpista não hackeia nada. <em>Ele convence alguém.</em></h2>
+      <p class="rv d2">E a pequena empresa é o alvo preferido: tem pressa, um celular só e ninguém conferindo. Estes são os 6 golpes que o e-book ensina a reconhecer.</p>
+    </div>
+    <div class="scams">
+      <div class="pcard glass rv"><div class="n">01</div><p><strong>O código do WhatsApp.</strong> Alguém pede "o código que chegou por SMS". Com ele, leva o seu WhatsApp.</p></div>
+      <div class="pcard glass rv d1"><div class="n">02</div><p><strong>O número novo.</strong> Copiam a foto da sua empresa e pedem Pix aos seus clientes de outro número.</p></div>
+      <div class="pcard glass rv d2"><div class="n">03</div><p><strong>O falso suporte.</strong> "Sua conta será desativada": o link leva a uma página falsa do Instagram.</p></div>
+      <div class="pcard glass rv"><div class="n">04</div><p><strong>A falsa central do banco.</strong> Uma ligação convincente pede transferência para uma "conta segura".</p></div>
+      <div class="pcard glass rv d1"><div class="n">05</div><p><strong>O boleto falso.</strong> "O fornecedor mudou de conta": o dinheiro vai direto para o golpista.</p></div>
+      <div class="pcard glass rv d2"><div class="n">06</div><p><strong>A troca de chip.</strong> O celular fica sem sinal e alguém passa a receber os seus códigos.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:20px">
+  <div class="wrap demo">
+    <div class="rv">
+      <span class="eyebrow">// bônus incluso</span>
+      <h2>Veja a nota da sua empresa <em>subir.</em></h2>
+      <ul>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12l5 5L20 7"/></svg><span><strong>Programa BDR Blindagem:</strong> a versão interativa do e-book, que guia você ação por ação no celular ou no computador.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12l5 5L20 7"/></svg><span><strong>Nota de 0 a 100</strong> que sobe a cada ação concluída, começando pelo que é essencial.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12l5 5L20 7"/></svg><span><strong>Certificado de segurança digital</strong> com o nome da sua empresa no final.</span></li>
+      </ul>
+    </div>
+    <div class="panel rv d1" aria-label="Demonstração do painel de blindagem">
+      <div class="ring"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="50" stroke="#1d212b" stroke-width="10" fill="none"/><circle id="arc" cx="60" cy="60" r="50" stroke="#FF5A5F" stroke-width="10" fill="none" stroke-linecap="round" stroke-dasharray="314.16" stroke-dashoffset="314.16" style="transition:stroke-dashoffset .6s,stroke .6s"/></svg>
+        <div class="v"><b id="nota">0</b><small id="nivel" style="color:#FF5A5F">EXPOSTA</small></div></div>
+      <ul class="plist" id="plist">
+          <li><span class="bx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L20 7"/></svg></span>WhatsApp com confirmação em duas etapas</li>
+          <li><span class="bx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L20 7"/></svg></span>Instagram com dois fatores</li>
+          <li><span class="bx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L20 7"/></svg></span>Gmail com verificação em duas etapas</li>
+          <li><span class="bx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L20 7"/></svg></span>Gerenciador de senhas instalado</li>
+          <li><span class="bx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L20 7"/></svg></span>Regra do Pix combinada com a equipe</li>
+          <li><span class="bx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L20 7"/></svg></span>Plano de emergência impresso</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:40px">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow rv">// conteúdo</span>
+      <h2 class="rv d1">O que tem dentro</h2>
+      <p class="rv d2">Cada capítulo traz o caminho exato dentro do aplicativo, do jeito que aparece na tela. Sem teoria, sem antivírus caro.</p>
+    </div>
+    <div class="chapters">
+      <div class="ch glass rv"><span class="num">01</span><div><h3>Os 6 golpes mais comuns</h3><p>Código do WhatsApp, número novo, falso suporte, falsa central do banco, boleto falso e troca de chip.</p></div></div>
+      <div class="ch glass rv d1"><span class="num">02</span><div><h3>Diagnóstico em 5 minutos</h3><p>10 perguntas que dão a nota de segurança da sua empresa.</p></div></div>
+      <div class="ch glass rv"><span class="num">03</span><div><h3>WhatsApp Business blindado</h3><p>Confirmação em duas etapas, aparelhos conectados e backup.</p></div></div>
+      <div class="ch glass rv d1"><span class="num">04</span><div><h3>Instagram e Facebook</h3><p>Dois fatores, códigos de recuperação e a Página protegida.</p></div></div>
+      <div class="ch glass rv"><span class="num">05</span><div><h3>Gmail, a chave-mestra</h3><p>Por que o e-mail é a conta mais importante, e como trancar.</p></div></div>
+      <div class="ch glass rv d1"><span class="num">06</span><div><h3>Senhas sem dor de cabeça</h3><p>Gerenciador gratuito e a ordem certa para trocar as senhas.</p></div></div>
+      <div class="ch glass rv"><span class="num">07</span><div><h3>O celular da empresa</h3><p>Bloqueio, PIN do chip, localizar e apagar à distância.</p></div></div>
+      <div class="ch glass rv d1"><span class="num">08</span><div><h3>Pix: as regras de ouro</h3><p>5 regras simples que evitam o prejuízo de verdade.</p></div></div>
+      <div class="ch glass rv"><span class="num">09</span><div><h3>Site, domínio e e-mail</h3><p>Renovação automática, cadeado e e-mail falso com seu nome.</p></div></div>
+      <div class="ch glass rv d1"><span class="num">10</span><div><h3>A equipe e os clientes</h3><p>As 3 regras da empresa e o roteiro da conversa de 10 minutos.</p></div></div>
+      <div class="ch glass rv"><span class="num">11</span><div><h3>Plano de emergência</h3><p>O que fazer nos primeiros 30 minutos, pronto pra imprimir.</p></div></div>
+      <div class="ch glass rv d1"><span class="num">12</span><div><h3>O plano de 30 dias</h3><p>Uma semana de cada vez, começando pelo essencial.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:40px">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow rv">// você recebe</span>
+      <h2 class="rv d1">Tudo pronto pra aplicar</h2>
+    </div>
+    <div class="deliver">
+      <div class="dv glass rv"><div class="dv-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h11l5 5v11H4z"/><path d="M15 4v5h5M8 13h8M8 17h5"/></svg></div><h3>E-book em PDF</h3><p>12 capítulos com passo a passo de cada aplicativo.</p></div>
+      <div class="dv glass rv d1"><div class="dv-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg></div><h3>Programa interativo</h3><p>Nota de segurança em tempo real e certificado no final.</p></div>
+      <div class="dv glass rv d2"><div class="dv-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 2.4 18a2 2 0 0 0 1.7 3h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg></div><h3>Plano de emergência</h3><p>O que fazer se clonarem o WhatsApp, pronto pra imprimir.</p></div>
+      <div class="dv glass rv d3"><div class="dv-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4M8 14l2 2 4-4"/></svg></div><h3>Plano de 30 dias</h3><p>Checklist por semana, do essencial ao acabamento.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:40px">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow rv">// pra quem é</span>
+      <h2 class="rv d1">Feito pra quem vende pelo celular</h2>
+    </div>
+    <div class="who">
+      <div class="who-card glass yes rv">
+        <h3>É pra você se</h3>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L20 7"/></svg>vende pelo WhatsApp e divulga no Instagram;</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L20 7"/></svg>recebe e faz pagamentos por Pix e boleto;</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L20 7"/></svg>já conhece alguém que teve o WhatsApp clonado;</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L20 7"/></svg>não entende de tecnologia e quer um passo a passo simples.</li>
+        </ul>
+      </div>
+      <div class="who-card glass no rv d1">
+        <h3>Não é pra você se</h3>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M6 6l12 12M18 6 6 18"/></svg>procura um curso técnico de segurança da informação;</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M6 6l12 12M18 6 6 18"/></svg>sua empresa já tem uma equipe de TI cuidando disso;</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M6 6l12 12M18 6 6 18"/></svg>precisa recuperar uma conta invadida agora (nesse caso, fale direto com a gente).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="oferta" style="padding-top:40px">
+  <div class="wrap">
+    <div class="offer glass rv">
+      <div>
+        <span class="eyebrow">// comece hoje</span>
+        <h2>Em uma tarde, sua empresa sai de "exposta" para "protegida".</h2>
+        <p>Você recebe o acesso na hora, por e-mail, baixa o e-book na área de membros e já começa pela Semana 1: as ações essenciais levam cerca de uma hora.</p>
+        <div class="guar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg>
+          <span><strong style="color:var(--text)">Garantia de 7 dias.</strong> Se não for pra você, peça o reembolso pela própria Kiwify dentro do prazo.</span>
+        </div>
+      </div>
+      <div class="offer-box">
+        <div class="price js-price"><small>INVESTIMENTO</small><b class="js-preco"></b></div>
+        <a href="#" class="btn btn-lime js-checkout" target="_blank" rel="noopener">Quero o e-book agora
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <small>Pagamento seguro pela Kiwify · Pix, cartão ou boleto</small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:40px">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow rv">// dúvidas</span>
+      <h2 class="rv d1">Perguntas frequentes</h2>
+    </div>
+    <div class="faq">
+      <details class="glass rv"><summary>Preciso entender de tecnologia?</summary><p>Não. O e-book foi escrito para o dono de pequena empresa, com o caminho de cada configuração do jeito que aparece na tela do celular.</p></details>
+      <details class="glass rv"><summary>Preciso comprar algum programa?</summary><p>Não. Todas as proteções usam recursos gratuitos que já existem no WhatsApp, no Instagram, no Google e no seu celular.</p></details>
+      <details class="glass rv"><summary>Serve para Android e iPhone?</summary><p>Sim. Quando o caminho é diferente em cada sistema, o e-book mostra os dois.</p></details>
+      <details class="glass rv"><summary>Isso garante que nunca vou cair num golpe?</summary><p>Nenhum material garante isso. O que o e-book faz é fechar as portas que os golpes mais comuns usam e preparar você e a equipe para reconhecer e reagir rápido.</p></details>
+      <details class="glass rv"><summary>Como recebo o e-book e o programa?</summary><p>Logo depois da compra você recebe por e-mail o acesso à área de membros da Kiwify. O link do programa interativo está no último capítulo do e-book.</p></details>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <a href="../" class="logo"><div class="logo-mark">BDR</div>BDR<span>Digital</span></a>
+      <div class="foot-links">
+        <a href="https://wa.me/5541995359738" target="_blank" rel="noopener">WhatsApp</a>
+        <a href="mailto:bdrdigital.studio@gmail.com">bdrdigital.studio@gmail.com</a>
+        <a href="https://instagram.com/bdrdigital_" target="_blank" rel="noopener">@bdrdigital_</a>
+      </div>
+    </div>
+    <div class="copy">© <span id="ano"></span> BDR Digital. Todos os direitos reservados.</div>
+  </div>
+</footer>
+
+<div class="mbar" id="mbar">
+  <span><b>Empresa Blindada</b><span class="js-preco"></span></span>
+  <a href="#oferta" class="btn btn-lime btn-sm">Quero o e-book</a>
+</div>
+
+<script>
+  /* ======== CONFIGURAÇÕES (mude aqui) ======== */
+  // Cole aqui o link do checkout da Kiwify quando o produto estiver criado.
+  const CHECKOUT_URL = "";
+  // Preço que aparece na página. Ex.: "R$ 27,00". Deixe "" para não mostrar preço.
+  const PRECO = "R$ 27,00";
+  /* =========================================== */
+
+  const WHATS = "https://wa.me/5541995359738?text=" + encodeURIComponent("Oi! Quero o e-book Empresa Blindada.");
+  document.querySelectorAll('.js-checkout').forEach(a => a.href = CHECKOUT_URL || WHATS);
+  if (PRECO) {
+    document.querySelectorAll('.js-preco').forEach(el => el.textContent = PRECO);
+    document.querySelectorAll('.js-price').forEach(el => el.classList.add('on'));
+  }
+  document.getElementById('ano').textContent = new Date().getFullYear();
+
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), {threshold:.12});
+  document.querySelectorAll('.rv').forEach(el => io.observe(el));
+
+  const book = document.getElementById('book');
+  if (matchMedia('(hover:hover)').matches && !matchMedia('(prefers-reduced-motion:reduce)').matches) {
+    addEventListener('mousemove', e => {
+      const x = e.clientX / innerWidth - .5, y = e.clientY / innerHeight - .5;
+      book.style.transform = `rotateY(${-24 + x * 18}deg) rotateX(${6 - y * 10}deg)`;
+    });
+  }
+
+  const mbar = document.getElementById('mbar'), oferta = document.getElementById('oferta');
+  addEventListener('scroll', () => {
+    const r = oferta.getBoundingClientRect();
+    mbar.classList.toggle('show', scrollY > 600 && (r.top > innerHeight || r.bottom < 0));
+  }, {passive:true});
+
+  // painel: a nota sobe conforme as ações são concluídas
+  const itens = [...document.querySelectorAll('#plist li')], arc = document.getElementById('arc'),
+        nota = document.getElementById('nota'), nivel = document.getElementById('nivel');
+  const pesos = [20, 16, 20, 14, 14, 8], niveis = [[90,'BLINDADA','#C8FF45'],[65,'PROTEGIDA','#7C6CFF'],[35,'BÁSICA','#FFB547'],[0,'EXPOSTA','#FF5A5F']];
+  function mostra(n) {
+    let v = 8; itens.forEach((li, i) => { li.classList.toggle('ok', i < n); if (i < n) v += pesos[i]; });
+    const [, nome, cor] = niveis.find(l => v >= l[0]);
+    arc.style.strokeDashoffset = 314.16 * (1 - v / 100); arc.style.stroke = cor;
+    nota.textContent = v; nivel.textContent = nome; nivel.style.color = cor;
+  }
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+  async function rodar() { while (true) { for (let n = 0; n <= itens.length; n++) { mostra(n); await sleep(n ? 900 : 1200); } await sleep(3500); } }
+  if (matchMedia('(prefers-reduced-motion:reduce)').matches) mostra(itens.length);
+  else new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { rodar(); o.disconnect(); } }).observe(document.getElementById('plist'));
+</script>
+</body>
+</html>

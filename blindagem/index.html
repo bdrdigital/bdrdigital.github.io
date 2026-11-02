@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BDR Blindagem · Segurança digital para pequenas empresas</title>
+<style>
+:root{--bg:#07080B;--card:#101218;--card2:#161922;--line:#232733;--txt:#EDEFF4;--mut:#9095A3;--lime:#C8FF45;--vio:#7C6CFF;--red:#FF5A5F;--amb:#FFB547;
+--sans:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;--disp:"Inter Display",Inter,system-ui,sans-serif;--mono:"JetBrains Mono","DejaVu Sans Mono",ui-monospace,monospace}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--txt);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+body{min-height:100vh;background:radial-gradient(1200px 600px at 85% -10%,rgba(124,108,255,.16),transparent 60%),radial-gradient(900px 500px at -10% 110%,rgba(200,255,69,.07),transparent 60%),var(--bg)}
+button{font-family:inherit;cursor:pointer}a{color:var(--lime)}
+.wrap{max-width:1040px;margin:0 auto;padding:22px 20px 80px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:28px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.14em;font-size:13px}
+.logo .sh{width:30px;height:34px}
+.logo span{color:var(--mut);font-weight:600}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--lime);text-transform:uppercase}
+h1{font-family:var(--disp);font-size:clamp(34px,6vw,60px);line-height:1.02;margin:14px 0 14px;letter-spacing:-.02em;font-weight:800}
+h1 em{font-style:italic;color:var(--lime)}
+h2{font-family:var(--disp);font-size:26px;margin:0 0 6px;letter-spacing:-.01em}
+.lead{color:var(--mut);font-size:17px;line-height:1.55;max-width:620px}
+.btn{background:var(--lime);color:#0A0B0E;border:0;border-radius:12px;padding:15px 22px;font-weight:800;font-size:15px;display:inline-flex;align-items:center;gap:8px;transition:transform .15s,filter .15s}
+.btn:hover{transform:translateY(-1px);filter:brightness(1.05)}.btn:disabled{opacity:.35;cursor:not-allowed;transform:none}
+.btn.ghost{background:transparent;color:var(--txt);border:1px solid var(--line)}.btn.ghost:hover{border-color:#3a3f4d}
+.btn.sm{padding:9px 14px;font-size:13px;border-radius:10px}
+.card{background:linear-gradient(180deg,var(--card),#0D0F14);border:1px solid var(--line);border-radius:18px;padding:22px}
+.grid{display:grid;gap:14px}
+.hero{display:grid;grid-template-columns:1.15fr .85fr;gap:28px;align-items:center;margin:10px 0 36px}
+@media(max-width:820px){.hero{grid-template-columns:1fr}}
+.stats{display:flex;gap:22px;margin-top:22px;flex-wrap:wrap}.stats div{font-size:13px;color:var(--mut)}.stats b{display:block;font-family:var(--disp);font-size:26px;color:var(--txt)}
+label.f{display:block;font-size:13px;color:var(--mut);margin:14px 0 6px;font-weight:600}
+input.t{width:100%;background:#0B0D12;border:1px solid var(--line);border-radius:10px;color:var(--txt);padding:13px 14px;font-size:15px;font-family:inherit;outline:none}
+input.t:focus{border-color:var(--vio)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:#0B0D12;color:var(--txt);border-radius:999px;padding:10px 14px;font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px}
+.chip .dot{width:16px;height:16px;border-radius:5px;border:2px solid #3a3f4d;display:grid;place-items:center;font-size:11px;color:#0A0B0E}
+.chip.on{border-color:var(--lime);background:rgba(200,255,69,.07)}.chip.on .dot{background:var(--lime);border-color:var(--lime)}
+.note{font-size:12px;color:var(--mut);margin-top:10px;line-height:1.5}
+/* dashboard */
+.dash{display:grid;grid-template-columns:320px 1fr;gap:18px;align-items:start}
+@media(max-width:860px){.dash{grid-template-columns:1fr}}
+.score{text-align:center;position:sticky;top:18px}
+.ring{width:190px;height:190px;margin:6px auto 10px;position:relative}
+.ring svg{transform:rotate(-90deg)}
+.ring .v{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring .v b{font-family:var(--disp);font-size:54px;line-height:1}.ring .v small{color:var(--mut);font-size:12px}
+.lvl{display:inline-block;font-family:var(--mono);font-size:12px;letter-spacing:.12em;padding:7px 12px;border-radius:999px;font-weight:700;margin-bottom:8px}
+.mini{display:flex;justify-content:space-around;margin:14px 0 16px;font-size:12px;color:var(--mut)}.mini b{display:block;color:var(--txt);font-size:20px;font-family:var(--disp)}
+.mods{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.mod{text-align:left;background:linear-gradient(180deg,var(--card),#0D0F14);border:1px solid var(--line);border-radius:16px;padding:18px;color:var(--txt);transition:border-color .2s,transform .2s}
+.mod:hover{border-color:#3a3f4d;transform:translateY(-2px)}
+.mod .ic{font-size:24px}.mod h3{margin:10px 0 4px;font-size:17px}.mod p{margin:0;color:var(--mut);font-size:13px;line-height:1.45;min-height:38px}
+.bar{height:6px;border-radius:9px;background:#1d212b;overflow:hidden;margin-top:14px}.bar i{display:block;height:100%;background:var(--lime);border-radius:9px;transition:width .4s}
+.mod .meta{display:flex;justify-content:space-between;font-size:12px;color:var(--mut);margin-top:8px;font-family:var(--mono)}
+.mod.done{border-color:rgba(200,255,69,.45)}
+.alert{display:flex;gap:12px;align-items:flex-start;background:rgba(255,90,95,.08);border:1px solid rgba(255,90,95,.35);border-radius:14px;padding:14px 16px;margin-bottom:14px;font-size:14px;line-height:1.5}
+/* module view */
+.back{background:none;border:0;color:var(--mut);font-size:14px;padding:0;margin-bottom:16px}
+.step{border:1px solid var(--line);border-radius:16px;background:linear-gradient(180deg,var(--card),#0D0F14);margin-bottom:12px;overflow:hidden}
+.step .hd{display:flex;gap:14px;align-items:flex-start;padding:18px}
+.ck{flex:0 0 30px;height:30px;border-radius:9px;border:2px solid #3a3f4d;background:transparent;display:grid;place-items:center;color:#0A0B0E;font-weight:900;font-size:16px;transition:.2s}
+.step.ok .ck{background:var(--lime);border-color:var(--lime)}
+.step.ok{border-color:rgba(200,255,69,.35)}
+.step h4{margin:2px 0 4px;font-size:16px}.step .why{color:var(--mut);font-size:14px;line-height:1.5}
+.pri{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;padding:3px 7px;border-radius:5px;margin-left:6px;vertical-align:2px}
+.pri.e{background:rgba(255,90,95,.14);color:#FF8A8E}.pri.r{background:rgba(124,108,255,.16);color:#A99EFF}
+.how{border-top:1px dashed var(--line);padding:14px 18px 18px 62px;font-size:14px;line-height:1.6;color:#C9CCD6}
+.how ol{margin:0;padding-left:18px}.how li{margin:3px 0}
+.how .path{font-family:var(--mono);font-size:12.5px;background:#0B0D12;border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin:8px 0;color:var(--lime);overflow-wrap:anywhere}
+.how .tip{font-size:13px;color:var(--mut);margin-top:8px}
+.toggle{background:none;border:0;color:var(--vio);font-size:13px;font-weight:700;padding:0;margin-top:8px}
+.help{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:18px}
+/* emergency + cert */
+.emg h3{margin:18px 0 8px;font-size:16px;color:var(--lime)}.emg ol{margin:0;padding-left:20px;line-height:1.65;font-size:14.5px}
+.cert{background:#fff;color:#111;border-radius:16px;padding:46px 50px;position:relative;overflow:hidden}
+.cert:before{content:"";position:absolute;inset:14px;border:2px solid #111;border-radius:10px;pointer-events:none}
+.cert .k{font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:#555}
+.cert h2{font-size:40px;margin:14px 0 4px;color:#111}.cert .co{font-family:var(--disp);font-size:30px;font-weight:800;margin:20px 0 4px}
+.cert .seal{position:absolute;right:46px;top:44px;width:118px;height:118px;border-radius:50%;background:#07080B;color:var(--lime);display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:900;font-size:13px;letter-spacing:.1em;text-align:center}
+.cert .seal b{font-size:34px;font-family:var(--disp);letter-spacing:0;color:#fff}
+.cert table{width:100%;border-collapse:collapse;margin-top:22px;font-size:13px}.cert td{padding:7px 0;border-bottom:1px solid #e6e6e6}.cert td:last-child{text-align:right;font-weight:700}
+.cert .pend{margin-top:18px;font-size:13px;line-height:1.55}.cert .foot{margin-top:24px;display:flex;justify-content:space-between;font-size:12px;color:#555;border-top:1px solid #ddd;padding-top:12px}
+@media(max-width:600px){.cert{padding:30px 24px}.cert .seal{position:static;margin-bottom:10px;width:96px;height:96px}.how{padding-left:18px}}
+.foot-bdr{margin-top:40px;text-align:center;color:var(--mut);font-size:12px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:var(--lime);color:#0A0B0E;padding:11px 16px;border-radius:10px;font-weight:800;font-size:14px;opacity:0;transition:.3s;pointer-events:none;z-index:9}
+.toast.on{opacity:1;transform:translateX(-50%)}
+@media print{body{background:#fff}.noprint{display:none!important}.wrap{padding:0;max-width:none}.cert{border-radius:0}.emg{background:#fff!important;color:#111!important;border:0}.emg h3{color:#111}.emg *{color:#111!important}}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<div class="toast" id="toast"></div>
+<script>
+/* ======= CONFIGURAÇÃO DO CONSULTOR (edite aqui) ======= */
+const CONSULTOR = { nome: "BDR Digital", whatsapp: "5541995359738", email: "bdrdigital.studio@gmail.com", site: "bdrdigital.github.io" };
+
+/* ======= CONTEÚDO ======= */
+const AREAS = [
+  { id:"whatsapp", nome:"WhatsApp Business", ic:"💬", sempre:false, desc:"O canal de vendas. É o alvo nº 1 de golpe no Brasil.",
+    passos:[
+      { t:"Ativar a confirmação em duas etapas (PIN)", e:1, why:"Mesmo que alguém consiga o código por SMS, não entra na conta sem o seu PIN de 6 dígitos.",
+        how:["Abra o WhatsApp Business.","Android: toque nos 3 pontinhos ⋮ → Configurações. iPhone: toque em Configurações/Ajustes.","Toque em Conta → Confirmação em duas etapas → Ativar.","Crie um PIN de 6 dígitos que ninguém saiba (não use data de aniversário).","Cadastre um e-mail de recuperação e confirme pelo código que chega nele."],
+        path:"Configurações → Conta → Confirmação em duas etapas → Ativar", tip:"Guarde o PIN no gerenciador de senhas (passo da área Senhas)." },
+      { t:"Revisar os aparelhos conectados", e:1, why:"Um computador esquecido com o WhatsApp Web aberto dá acesso a todas as conversas com clientes.",
+        how:["Android: ⋮ → Dispositivos conectados. iPhone: Configurações → Dispositivos conectados.","Toque em cada aparelho que você não reconhece ou não usa mais → Desconectar."],
+        path:"⋮ / Configurações → Dispositivos conectados" },
+      { t:"Combinar a regra do código", e:1, why:"O golpe mais comum é alguém pedir 'o código que chegou por SMS'. Quem tem o código, tem o WhatsApp.",
+        how:["Avise todo mundo que mexe no celular da empresa: o código de 6 dígitos do WhatsApp nunca é passado para ninguém.","Nem para 'o suporte', nem para 'o site de anúncios', nem para 'a pesquisa'. Nenhuma empresa séria pede esse código."] },
+      { t:"Ativar o backup das conversas", e:0, why:"Se o celular for roubado ou quebrar, as conversas com clientes não se perdem.",
+        how:["Configurações → Conversas → Backup de conversas.","Escolha Google Drive (Android) ou iCloud (iPhone) e a frequência Diária."],
+        path:"Configurações → Conversas → Backup de conversas" },
+      { t:"Avisar os clientes sobre o golpe do 'número novo'", e:0, why:"Golpistas copiam a foto da empresa e pedem Pix de outro número. Um aviso fixo evita prejuízo e protege a reputação.",
+        how:["Adicione na descrição do perfil comercial: \"Nunca pedimos pagamento por número novo. Na dúvida, ligue para este número.\"","Repita o aviso no status uma vez por mês."] }
+    ]},
+  { id:"instagram", nome:"Instagram", ic:"📸", sempre:false, desc:"A vitrine da empresa. Conta roubada = vendas paradas por semanas.",
+    passos:[
+      { t:"Ativar a autenticação de dois fatores", e:1, why:"Com ela, a senha sozinha não basta para entrar na conta.",
+        how:["Vá no seu perfil → menu ☰ → Central de Contas.","Toque em Senha e segurança → Autenticação de dois fatores.","Escolha a conta do Instagram.","Prefira 'App de autenticação' (Google Authenticator ou o próprio gerenciador de senhas). Se não quiser, use WhatsApp ou SMS."],
+        path:"Perfil → ☰ → Central de Contas → Senha e segurança → Autenticação de dois fatores" },
+      { t:"Guardar os códigos de recuperação", e:1, why:"Se perder o celular, são eles que devolvem o acesso à conta.",
+        how:["Na mesma tela de Autenticação de dois fatores, abra 'Métodos adicionais' → Códigos de recuperação.","Salve os códigos no gerenciador de senhas ou imprima e guarde em local seguro."] },
+      { t:"Conferir e-mail e telefone da conta", e:1, why:"Se o e-mail cadastrado for antigo ou de ex-funcionário, a recuperação da conta fica impossível.",
+        how:["Central de Contas → Dados pessoais → Informações de contato.","Deixe o e-mail principal da empresa e o celular do dono. Remova contatos antigos."],
+        path:"Central de Contas → Dados pessoais → Informações de contato" },
+      { t:"Revisar onde a conta está conectada", e:0, why:"Mostra se alguém entrou na conta de outro aparelho.",
+        how:["Central de Contas → Senha e segurança → Onde você está conectado.","Saia de todos os aparelhos que você não reconhece e troque a senha em seguida."] },
+      { t:"Aprender o golpe do 'selo azul / conta será desativada'", e:0, why:"Mensagens no direct ou e-mail pedindo para 'confirmar a conta' em um link são o jeito mais comum de roubar perfis.",
+        how:["A Meta não manda direct pedindo login ou pagamento.","Na dúvida, abra o app e veja em Configurações → Central de Contas se existe algum aviso de verdade."] }
+    ]},
+  { id:"facebook", nome:"Facebook e Página", ic:"📘", sempre:false, desc:"Página e anúncios. Quem controla o Facebook controla o dinheiro dos anúncios.",
+    passos:[
+      { t:"Ativar a autenticação de dois fatores", e:1, why:"Protege a Página e o gerenciador de anúncios ligado ao seu perfil.",
+        how:["Menu → Configurações e privacidade → Configurações → Central de Contas.","Senha e segurança → Autenticação de dois fatores → escolha o perfil do Facebook.","Guarde os códigos de recuperação que aparecem no fim."],
+        path:"Central de Contas → Senha e segurança → Autenticação de dois fatores" },
+      { t:"Ligar os alertas de login", e:0, why:"Você recebe um aviso na hora que alguém entra de um aparelho novo.",
+        how:["Central de Contas → Senha e segurança → Alertas de login.","Ative notificações no app e por e-mail."] },
+      { t:"Ter um segundo administrador de confiança", e:0, why:"Se a sua conta for bloqueada, a Página não fica órfã.",
+        how:["Na Página → Configurações → Acesso à Página.","Adicione um sócio ou familiar de confiança como administrador, também com dois fatores ativados."] }
+    ]},
+  { id:"google", nome:"Google / Gmail", ic:"🔑", sempre:false, desc:"A chave-mestra: quem entra no e-mail recupera a senha de todo o resto.",
+    passos:[
+      { t:"Ativar a verificação em duas etapas", e:1, why:"É a proteção mais importante de todas: o e-mail recupera senha do Instagram, do banco, do site…",
+        how:["Acesse myaccount.google.com/security pelo computador ou celular.","Em 'Como você faz login no Google', toque em Verificação em duas etapas.","Siga as instruções e use o celular como segunda etapa."],
+        path:"myaccount.google.com/security → Verificação em duas etapas" },
+      { t:"Conferir telefone e e-mail de recuperação", e:1, why:"Sem eles, recuperar a conta pode levar dias, ou nunca acontecer.",
+        how:["Na mesma página de Segurança, confira 'Telefone de recuperação' e 'E-mail de recuperação'.","Use números e e-mails que só o dono controla."] },
+      { t:"Criar uma chave de acesso (passkey)", e:0, why:"Você entra com a digital ou o rosto. Não existe senha para ser roubada em site falso.",
+        how:["Acesse myaccount.google.com/signinoptions/passkeys.","Toque em Criar uma chave de acesso e desbloqueie o celular."],
+        path:"myaccount.google.com/signinoptions/passkeys" },
+      { t:"Guardar os códigos de backup", e:0, why:"Servem para entrar se você perder o celular.",
+        how:["Em Verificação em duas etapas → Códigos de backup.","Salve no gerenciador de senhas ou imprima."] },
+      { t:"Fazer a Verificação de segurança do Google", e:0, why:"O próprio Google lista aparelhos estranhos, apps com acesso e senhas vazadas.",
+        how:["Acesse myaccount.google.com/security-checkup e resolva cada item em amarelo ou vermelho."],
+        path:"myaccount.google.com/security-checkup" }
+    ]},
+  { id:"senhas", nome:"Senhas", ic:"🗝️", sempre:true, desc:"Uma senha repetida vazada abre todas as portas ao mesmo tempo.",
+    passos:[
+      { t:"Instalar um gerenciador de senhas", e:1, why:"Ele cria e guarda senhas fortes. Você só precisa lembrar de uma.",
+        how:["Instale o Bitwarden (gratuito) no celular e no computador: bitwarden.com.","Crie uma senha-mestra longa, tipo uma frase: \"cafe-quente-na-padaria-2026\".","Ative a verificação em duas etapas do próprio Bitwarden."] },
+      { t:"Senha única e forte no e-mail principal", e:1, why:"O e-mail é o que recupera todas as outras contas.",
+        how:["Troque a senha do e-mail por uma gerada no gerenciador.","Ela não pode ser usada em nenhum outro lugar."] },
+      { t:"Trocar senhas repetidas", e:0, why:"Quando um site qualquer vaza, os golpistas testam a mesma senha no Instagram e no e-mail.",
+        how:["No Bitwarden, abra Ferramentas → Relatórios → Senhas reutilizadas.","Troque primeiro: e-mail, Instagram, banco, hospedagem do site."] },
+      { t:"Remover o acesso de ex-funcionários", e:1, why:"Quem saiu da empresa não pode continuar sabendo senhas nem ter acesso às contas.",
+        how:["Troque as senhas que eram compartilhadas.","Remova ex-funcionários de Páginas, gerenciador de anúncios, Google Drive e grupos."] }
+    ]},
+  { id:"celular", nome:"Celular da empresa", ic:"📱", sempre:true, desc:"Celular sem bloqueio na mão errada = todas as contas abertas.",
+    passos:[
+      { t:"Bloqueio de tela com PIN ou biometria", e:1, why:"Se o celular for perdido ou roubado, ninguém abre os apps.",
+        how:["Android: Configurações → Segurança → Bloqueio de tela. iPhone: Ajustes → Face ID/Touch ID e Código.","Use PIN de 6 dígitos ou mais e ative a digital ou o rosto."] },
+      { t:"Ativar o PIN do chip (SIM)", e:0, why:"Dificulta o uso do seu chip em outro aparelho para receber os códigos do WhatsApp e do banco.",
+        how:["Android: Configurações → Segurança → Bloqueio do chip SIM. iPhone: Ajustes → Celular → PIN do SIM.","Antes de ativar, pegue o código PUK na embalagem do chip ou com a operadora."],
+        tip:"Errar o PIN 3 vezes bloqueia o chip. Por isso o PUK precisa estar guardado." },
+      { t:"Ativar a localização e o apagamento remoto", e:0, why:"Permite achar, bloquear ou apagar o celular se ele sumir.",
+        how:["Android: confirme que 'Encontre Meu Dispositivo' está ativo (android.com/find).","iPhone: Ajustes → seu nome → Buscar → Buscar iPhone."] },
+      { t:"Atualizações automáticas", e:0, why:"A maioria das invasões usa falhas que já foram corrigidas em atualizações.",
+        how:["Ative a atualização automática do sistema e dos aplicativos na loja de apps."] }
+    ]},
+  { id:"financeiro", nome:"Pix e financeiro", ic:"💰", sempre:true, desc:"Onde o golpe vira prejuízo de verdade.",
+    passos:[
+      { t:"Regra: pagamento só depois de confirmar por ligação", e:1, why:"Boleto falso, 'fornecedor trocou de conta' e 'chefe pedindo Pix' são golpes muito comuns.",
+        how:["Qualquer pedido de pagamento ou de troca de dados bancários é confirmado por ligação para o número que você já tinha, nunca para o número da mensagem.","Ensine a mesma regra para quem cuida do caixa."] },
+      { t:"Saber que o banco nunca liga pedindo isso", e:1, why:"Golpe da 'central de segurança' e da 'conta segura' leva todo o saldo.",
+        how:["Banco não pede senha, código nem transferência para 'proteger a conta'.","Se receber essa ligação, desligue e ligue você para o número que está atrás do cartão."] },
+      { t:"Revisar os limites do Pix", e:0, why:"Um limite menor diminui o tamanho do prejuízo se algo der errado.",
+        how:["No app do banco, procure 'Limites Pix' e deixe só o necessário para o dia a dia, principalmente no período noturno.","Cadastre apenas os aparelhos que você usa."] }
+    ]},
+  { id:"site", nome:"Site e domínio", ic:"🌐", sempre:false, desc:"Se o domínio vencer, o site e o e-mail somem, e outra pessoa pode registrar o endereço.",
+    passos:[
+      { t:"Renovação automática do domínio", e:1, why:"Domínio vencido tira o site e o e-mail do ar e pode ser comprado por outra pessoa.",
+        how:["Entre onde o domínio foi registrado (Registro.br, Hostinger, GoDaddy…).","Ative a renovação automática e confira se o e-mail de cobrança é de alguém da empresa."] },
+      { t:"Cadeado de segurança (HTTPS)", e:1, why:"Sem ele, o navegador mostra 'Não seguro' ao lado do nome da empresa.",
+        how:["Abra o site e veja se aparece o cadeado ao lado do endereço.","Se não aparecer, ative o SSL gratuito no painel da hospedagem."] },
+      { t:"Diagnóstico de e-mail falso (SPF e DMARC)", e:0, why:"Sem essa configuração, golpistas mandam e-mails e boletos falsos com o nome da empresa.",
+        how:["Peça o Diagnóstico de Segurança da " + CONSULTOR.nome + ": ele verifica isso e mais 10 pontos em minutos."] },
+      { t:"Manter o site atualizado", e:0, why:"Sites WordPress desatualizados são invadidos de forma automática.",
+        how:["Atualize o WordPress, o tema e os plugins todo mês.","Apague plugins que você não usa."] }
+    ]},
+  { id:"equipe", nome:"Equipe e plano B", ic:"🛡️", sempre:true, desc:"Saber o que fazer nos primeiros 30 minutos muda tudo.",
+    passos:[
+      { t:"Imprimir o Plano de Emergência", e:1, why:"Na hora do susto ninguém lembra o que fazer. O plano já está pronto, com cada passo.",
+        how:["Abra o Plano de Emergência pelo botão no painel e imprima ou salve em PDF.","Deixe uma cópia com o dono e outra com quem cuida do atendimento."] },
+      { t:"Conversa de 10 minutos com a equipe", e:0, why:"A maioria dos golpes engana a pessoa, não o sistema.",
+        how:["Mostre as 3 regras: não passar código, confirmar pagamentos por ligação, não clicar em link de 'conta bloqueada'.","Repita a conversa sempre que alguém novo entrar."] }
+    ]}
+];
+
+/* ======= ESTADO ======= */
+const KEY = "bdr-blindagem-v1";
+let S = load() || { empresa:"", resp:"", usa:{whatsapp:true,instagram:true,google:true}, feitos:{}, inicio:null };
+let view = S.inicio ? "painel" : "inicio", aberto = null, abertos = {};
+function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch(e){ return null; } }
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e){} }
+const ativas = () => AREAS.filter(a => a.sempre || S.usa[a.id]);
+const kid = (a,i) => a.id + ":" + i;
+function calc(){
+  let tot=0, pts=0, ess=0, essOk=0, n=0, ok=0;
+  ativas().forEach(a => a.passos.forEach((p,i) => { const w = p.e ? 2 : 1, d = !!S.feitos[kid(a,i)]; tot+=w; n++; if(d){pts+=w; ok++;} if(p.e){ess++; if(d) essOk++;} }));
+  const sc = tot ? Math.round(pts/tot*100) : 0;
+  let lv;
+  if (sc>=90 && essOk===ess) lv = ["BLINDADA","#C8FF45","rgba(200,255,69,.12)"];
+  else if (sc>=65) lv = ["PROTEGIDA","#7C6CFF","rgba(124,108,255,.15)"];
+  else if (sc>=35) lv = ["BÁSICA","#FFB547","rgba(255,181,71,.13)"];
+  else lv = ["EXPOSTA","#FF5A5F","rgba(255,90,95,.13)"];
+  return { sc, lv, ess, essOk, n, ok };
+}
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const wa = msg => `https://wa.me/${CONSULTOR.whatsapp}?text=${encodeURIComponent(msg)}`;
+function toast(t){ const el=document.getElementById("toast"); el.textContent=t; el.classList.add("on"); clearTimeout(toast.h); toast.h=setTimeout(()=>el.classList.remove("on"),1800); }
+const shield = `<svg class="sh" viewBox="0 0 30 34"><path d="M15 1 28 6v10c0 8-5.6 14.4-13 17C7.6 30.4 2 24 2 16V6z" fill="none" stroke="#C8FF45" stroke-width="2.4"/><path d="m9 17 4 4 8-9" fill="none" stroke="#C8FF45" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const topo = (extra="") => `<div class="top noprint"><div class="logo">${shield}<div>BDR BLINDAGEM<br><span>por ${esc(CONSULTOR.nome)}</span></div></div>${extra}</div>`;
+
+/* ======= TELAS ======= */
+function render(){
+  const app = document.getElementById("app");
+  if (view==="inicio") app.innerHTML = telaInicio();
+  else if (view==="painel") app.innerHTML = telaPainel();
+  else if (view==="area") app.innerHTML = telaArea();
+  else if (view==="cert") app.innerHTML = telaCert();
+  else if (view==="emerg") app.innerHTML = telaEmerg();
+  window.scrollTo(0,0);
+}
+function telaInicio(){
+  const totalPassos = AREAS.reduce((s,a)=>s+a.passos.length,0);
+  const chips = AREAS.filter(a=>!a.sempre).map(a=>`<button class="chip ${S.usa[a.id]?"on":""}" onclick="tg('${a.id}')"><span class="dot">${S.usa[a.id]?"✓":""}</span>${a.ic} ${a.nome}</button>`).join("");
+  return `${topo()}
+  <div class="hero">
+    <div>
+      <div class="tag">Programa de segurança digital · pequenas empresas</div>
+      <h1>Sua empresa <em>blindada</em> em uma tarde.</h1>
+      <p class="lead">Um passo a passo guiado para proteger o WhatsApp, o Instagram, o e-mail e o caixa da sua empresa contra os golpes que mais acontecem no Brasil. Sem termos técnicos e sem instalar nada.</p>
+      <div class="stats"><div><b>${AREAS.length}</b>áreas protegidas</div><div><b>${totalPassos}</b>ações guiadas</div><div><b>~40 min</b>para concluir</div></div>
+    </div>
+    <div class="card">
+      <h2>Vamos começar</h2>
+      <label class="f">Nome da empresa</label><input class="t" id="emp" placeholder="Ex.: Padaria Pão Dourado" value="${esc(S.empresa)}">
+      <label class="f">Responsável</label><input class="t" id="resp" placeholder="Seu nome" value="${esc(S.resp)}">
+      <label class="f">O que a empresa usa?</label><div class="chips">${chips}</div>
+      <p class="note">Senhas, celular, Pix e plano de emergência entram sempre. O progresso fica salvo neste aparelho.</p>
+      <button class="btn" style="width:100%;justify-content:center;margin-top:16px" onclick="comecar()">Começar a blindagem →</button>
+    </div>
+  </div>`;
+}
+function telaPainel(){
+  const c = calc(), R=80, C=2*Math.PI*R;
+  const mods = ativas().map(a=>{
+    const d = a.passos.filter((p,i)=>S.feitos[kid(a,i)]).length, pc = Math.round(d/a.passos.length*100);
+    return `<button class="mod ${d===a.passos.length?"done":""}" onclick="abrir('${a.id}')"><div class="ic">${a.ic}</div><h3>${a.nome}</h3><p>${a.desc}</p>
+      <div class="bar"><i style="width:${pc}%"></i></div><div class="meta"><span>${d}/${a.passos.length} ações</span><span>${d===a.passos.length?"✓ concluída":pc+"%"}</span></div></button>`;
+  }).join("");
+  const faltaEss = c.ess - c.essOk;
+  const alerta = faltaEss>0 ? `<div class="alert"><span>⚠️</span><div><b>${faltaEss} ${faltaEss>1?"ações essenciais pendentes":"ação essencial pendente"}.</b> Comece pelas marcadas como <span class="pri e">ESSENCIAL</span>. Elas evitam os golpes mais comuns.</div></div>` : "";
+  return `${topo(`<button class="btn ghost sm" onclick="reiniciar()">Recomeçar</button>`)}
+  <div class="tag">${esc(S.empresa||"Sua empresa")}</div><h2 style="font-size:32px;margin:6px 0 20px">Painel de blindagem</h2>
+  <div class="dash">
+    <div class="card score">
+      <div class="ring"><svg width="190" height="190" viewBox="0 0 190 190"><circle cx="95" cy="95" r="${R}" stroke="#1d212b" stroke-width="14" fill="none"/>
+        <circle cx="95" cy="95" r="${R}" stroke="${c.lv[1]}" stroke-width="14" fill="none" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C*(1-c.sc/100)}" style="transition:stroke-dashoffset .6s"/></svg>
+        <div class="v"><b>${c.sc}</b><small>de 100</small></div></div>
+      <div class="lvl" style="color:${c.lv[1]};background:${c.lv[2]}">${c.lv[0]}</div>
+      <div class="mini"><div><b>${c.ok}/${c.n}</b>ações</div><div><b>${c.essOk}/${c.ess}</b>essenciais</div></div>
+      <div class="grid">
+        <button class="btn" style="justify-content:center" onclick="ir('cert')" ${c.sc<35?"disabled title='Chegue ao nível Básica para emitir'":""}>📄 Certificado e relatório</button>
+        <button class="btn ghost" style="justify-content:center" onclick="ir('emerg')">🚨 Plano de emergência</button>
+        <a class="btn ghost" style="justify-content:center;text-decoration:none" target="_blank" href="${wa(`Olá! Estou fazendo a BDR Blindagem da ${S.empresa||"minha empresa"} e preciso de ajuda.`)}">💬 Pedir ajuda</a>
+      </div>
+    </div>
+    <div>${alerta}<div class="mods">${mods}</div></div>
+  </div>
+  <div class="foot-bdr">BDR Blindagem · ${esc(CONSULTOR.nome)} · ${esc(CONSULTOR.email)}</div>`;
+}
+function telaArea(){
+  const a = AREAS.find(x=>x.id===aberto);
+  const steps = a.passos.map((p,i)=>{
+    const k=kid(a,i), ok=!!S.feitos[k], open = abertos[k] ?? !ok;
+    const how = `<ol>${p.how.map(h=>`<li>${esc(h)}</li>`).join("")}</ol>${p.path?`<div class="path">${esc(p.path)}</div>`:""}${p.tip?`<div class="tip">💡 ${esc(p.tip)}</div>`:""}`;
+    return `<div class="step ${ok?"ok":""}"><div class="hd"><button class="ck" onclick="marcar('${k}')" aria-label="Marcar como feito">${ok?"✓":""}</button>
+      <div><h4>${esc(p.t)}<span class="pri ${p.e?"e":"r"}">${p.e?"ESSENCIAL":"RECOMENDADO"}</span></h4><div class="why">${esc(p.why)}</div>
+      <button class="toggle" onclick="abre('${k}',${!open})">${open?"Esconder o passo a passo ▴":"Ver o passo a passo ▾"}</button></div></div>
+      ${open?`<div class="how">${how}</div>`:""}</div>`;
+  }).join("");
+  const d = a.passos.filter((p,i)=>S.feitos[kid(a,i)]).length;
+  return `${topo()}
+  <button class="back noprint" onclick="ir('painel')">← Voltar ao painel</button>
+  <div style="display:flex;align-items:center;gap:14px;margin-bottom:6px"><span style="font-size:34px">${a.ic}</span><div><h2>${a.nome}</h2><div style="color:var(--mut);font-size:14px">${a.desc}</div></div></div>
+  <div class="bar" style="margin:16px 0 20px"><i style="width:${d/a.passos.length*100}%"></i></div>
+  ${steps}
+  <div class="help"><span style="color:var(--mut);font-size:14px">Travou em algum passo? A gente faz junto com você por chamada de vídeo.</span>
+  <a class="btn ghost sm" style="text-decoration:none" target="_blank" href="${wa(`Olá! Travei na área ${a.nome} da BDR Blindagem (${S.empresa}).`)}">💬 Chamar no WhatsApp</a></div>`;
+}
+function telaCert(){
+  const c = calc(), hoje = new Date().toLocaleDateString("pt-BR");
+  const linhas = ativas().map(a=>{ const d=a.passos.filter((p,i)=>S.feitos[kid(a,i)]).length; return `<tr><td>${a.ic} ${a.nome}</td><td>${d}/${a.passos.length}</td></tr>`; }).join("");
+  const pend = []; ativas().forEach(a=>a.passos.forEach((p,i)=>{ if(!S.feitos[kid(a,i)]) pend.push([p.e?0:1, `${p.e?"<b>[Essencial]</b> ":""}${esc(a.nome)}: ${esc(p.t)}`]); }));
+  pend.sort((x,y)=>x[0]-y[0]); pend.forEach((v,i)=>pend[i]=v[1]);
+  const cod = "BDR-" + (S.inicio||Date.now()).toString(36).toUpperCase().slice(-6);
+  return `${topo(`<button class="btn sm" onclick="imprimir()">🖨️ Imprimir / salvar PDF</button>`)}
+  <button class="back noprint" onclick="ir('painel')">← Voltar ao painel</button>
+  <div class="cert">
+    <div class="seal">NÍVEL<b>${c.sc}</b>${c.lv[0]}</div>
+    <div class="k">${esc(CONSULTOR.nome.toUpperCase())} · BDR BLINDAGEM</div>
+    <h2>Certificado de Segurança Digital</h2>
+    <div style="color:#555;font-size:14px">Certificamos que a empresa abaixo concluiu o programa de proteção digital com o resultado indicado.</div>
+    <div class="co">${esc(S.empresa||"Empresa")}</div>
+    <div style="font-size:14px;color:#333">Responsável: ${esc(S.resp||"—")} · Emitido em ${hoje}</div>
+    <table>${linhas}<tr><td><b>Ações essenciais concluídas</b></td><td>${c.essOk}/${c.ess}</td></tr></table>
+    ${pend.length?`<div class="pend"><b>Próximos passos recomendados:</b><br>${pend.slice(0,8).join("<br>")}${pend.length>8?`<br>…e mais ${pend.length-8}.`:""}</div>`:`<div class="pend"><b>Todas as ações foram concluídas.</b> Recomendamos refazer a revisão a cada 6 meses.</div>`}
+    <div class="foot"><span>Código ${cod}</span><span>${esc(CONSULTOR.email)} · ${esc(CONSULTOR.site)}</span></div>
+  </div>
+  <p class="note noprint">Este certificado registra as boas práticas que a própria empresa declarou ter aplicado. Ele não garante proteção contra todo tipo de ataque.</p>`;
+}
+function telaEmerg(){
+  return `${topo(`<button class="btn sm" onclick="imprimir()">🖨️ Imprimir</button>`)}
+  <button class="back noprint" onclick="ir('painel')">← Voltar ao painel</button>
+  <div class="card emg">
+    <div class="tag">Plano de emergência · ${esc(S.empresa||"sua empresa")}</div>
+    <h2 style="margin-top:8px">Aconteceu? Siga na ordem. Sem pânico.</h2>
+    <h3>💬 Clonaram ou roubaram o WhatsApp</h3>
+    <ol><li>Abra o WhatsApp no seu celular e entre de novo com o seu número. O código chega por SMS e derruba o golpista.</li>
+      <li>Se o código não chegar, ligue para a operadora e peça o bloqueio do chip: pode ser troca de chip pelo golpista.</li>
+      <li>Avise os clientes por outro canal (Instagram, status de outro número): "Não façam nenhum Pix pedido pelo nosso WhatsApp até novo aviso".</li>
+      <li>Se não conseguir entrar, mande um e-mail para support@whatsapp.com com o assunto "Perdido/roubado: desative minha conta" e o número com +55 e DDD.</li>
+      <li>Quando recuperar: ative a confirmação em duas etapas e desconecte todos os aparelhos.</li>
+      <li>Registre um boletim de ocorrência (pode ser pela delegacia online do seu estado).</li></ol>
+    <h3>📸 Invadiram o Instagram ou o Facebook</h3>
+    <ol><li>Procure no e-mail uma mensagem da Meta sobre troca de e-mail ou senha e use o link "proteger conta" / "reverter".</li>
+      <li>Acesse instagram.com/hacked (ou facebook.com/hacked) e siga a recuperação.</li>
+      <li>Avise os seguidores por outro perfil ou pelo WhatsApp para não comprarem nada pelo perfil invadido.</li></ol>
+    <h3>🔑 Perdeu o acesso ao Gmail</h3>
+    <ol><li>Use g.co/recover pelo aparelho e pela rede de internet que você costuma usar.</li>
+      <li>Depois de entrar: troque a senha e confira o telefone e o e-mail de recuperação.</li></ol>
+    <h3>💰 Caiu num golpe de Pix ou pagamento</h3>
+    <ol><li>Ligue na hora para o seu banco e peça a abertura do <b>MED</b> (Mecanismo Especial de Devolução do Pix). Quanto antes, mais chance de recuperar.</li>
+      <li>Guarde prints da conversa, o comprovante e a chave Pix do golpista.</li>
+      <li>Registre o boletim de ocorrência e envie para o banco.</li></ol>
+    <h3>📞 Contatos importantes (preencha)</h3>
+    <ol style="list-style:none;padding:0"><li>Operadora do chip: ____________________</li><li>Gerente / central do banco: ____________________</li>
+      <li>Suporte técnico: ${esc(CONSULTOR.nome)} · WhatsApp +${CONSULTOR.whatsapp.replace(/^55(\d\d)(\d{5})(\d{4})$/,"55 ($1) $2-$3")} · ${esc(CONSULTOR.email)}</li></ol>
+  </div>`;
+}
+
+/* ======= AÇÕES ======= */
+function tg(id){ S.usa[id] = !S.usa[id]; guardaForm(); render(); }
+function guardaForm(){ const e=document.getElementById("emp"), r=document.getElementById("resp"); if(e) S.empresa=e.value.trim(); if(r) S.resp=r.value.trim(); }
+function comecar(){ guardaForm(); if(!S.empresa){ toast("Digite o nome da empresa"); document.getElementById("emp").focus(); return; } S.inicio = S.inicio || Date.now(); save(); ir("painel"); }
+function imprimir(){ try { window.print(); } catch(e){} toast("Se não abrir, use Ctrl+P (PC) ou Compartilhar → Imprimir (celular)"); }
+function ir(v){ view=v; render(); }
+function abrir(id){ aberto=id; view="area"; render(); }
+function abre(k,v){ abertos[k]=v; const y=window.scrollY; render(); window.scrollTo(0,y); }
+function marcar(k){ S.feitos[k]=!S.feitos[k]; if(S.feitos[k]){ abertos[k]=false; toast("✓ Feito!"); } else abertos[k]=true; save(); const y=window.scrollY; render(); window.scrollTo(0,y);
+  const a=AREAS.find(x=>x.id===aberto); if(a && a.passos.every((p,i)=>S.feitos[kid(a,i)])) toast("🛡️ " + a.nome + " blindado!"); }
+function reiniciar(){ if(!window.__conf){ window.__conf=1; toast("Toque de novo para apagar o progresso"); setTimeout(()=>window.__conf=0,2500); return; }
+  window.__conf=0; S={ empresa:"", resp:"", usa:{whatsapp:true,instagram:true,google:true}, feitos:{}, inicio:null }; save(); ir("inicio"); }
+render();
+</script>
+</body>
+</html>
